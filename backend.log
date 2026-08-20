@@ -1,0 +1,57 @@
+﻿uvicorn.exe : INFO:     Started server process [15536]
+At line:1 char:395
++ ... odel.onnx"; & "C:\Users\vatsa\OneDrive\Documents\dl-project\backend\b ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO:     Started server process [15536]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO:     Waiting for application startup.
+INFO:main:Starting Road Accident Detection System...
+INFO:main:ONNX model loaded successfully from C:\Users\vatsa\OneDrive\Documents\dl-project\backend\backend\model.onnx
+INFO:main:Model input: input_layer_3:0, output: Identity:0
+INFO:main:Connected to MongoDB successfully
+WARNING:main:Video file not found at ./sample_video.mp4. Using simulated frames.
+INFO:main:Startup complete
+INFO:main:Starting video frame processing task...
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:main:Accident detection saved to DB with ID: 6a7efbc74492305fd5e8c94e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbcc4492305fd5e8c94f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbd14492305fd5e8c950
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbd64492305fd5e8c951
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbdb4492305fd5e8c952
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbe04492305fd5e8c953
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbe54492305fd5e8c954
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbea4492305fd5e8c955
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbef4492305fd5e8c956
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbf44492305fd5e8c957
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbf94492305fd5e8c958
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efbfe4492305fd5e8c959
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc034492305fd5e8c95a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc084492305fd5e8c95b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc0d4492305fd5e8c95c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc124492305fd5e8c95d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc174492305fd5e8c95e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc1d4492305fd5e8c95f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc224492305fd5e8c960
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efc274492305fd5e8c961
+INFO:main:Accident alert broadcasted to 0 clients

@@ -1,0 +1,10 @@
+{
+  "tensorflow": true,
+  "numpy": true,
+  "scikit-learn": false,
+  "opencv-python": true,
+  "tqdm": true,
+  "matplotlib": true,
+  "tf2onnx": true,
+  "onnx": true
+}

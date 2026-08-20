@@ -1,0 +1,1 @@
+- [Project Status Snapshot 2026-08-13](memory/project-status.md) — snapshot of progress before user shutdown

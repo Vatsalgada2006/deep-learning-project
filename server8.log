@@ -1,0 +1,743 @@
+INFO:     Started server process [9012]
+INFO:     Waiting for application startup.
+INFO:backend.backend.main:Starting Road Accident Detection System...
+INFO:backend.backend.main:ONNX model loaded successfully from backend/backend/model.onnx
+INFO:backend.backend.main:Model input: input_layer_3:0, output: Identity:0
+INFO:backend.backend.main:Connected to MongoDB successfully
+WARNING:backend.backend.main:Video file not found at ./sample_video.mp4. Using simulated frames.
+INFO:backend.backend.main:Startup complete
+INFO:backend.backend.main:Starting video frame processing task...
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8004 (Press CTRL+C to quit)
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797592912879b94c1b3def
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797598912879b94c1b3df0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79759d912879b94c1b3df1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975a2912879b94c1b3df2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975a7912879b94c1b3df3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975ac912879b94c1b3df4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975b1912879b94c1b3df5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975b6912879b94c1b3df6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975bb912879b94c1b3df7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975c0912879b94c1b3df8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975c6912879b94c1b3df9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975ca912879b94c1b3dfa
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975d0912879b94c1b3dfb
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975d5912879b94c1b3dfc
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975d9912879b94c1b3dfd
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975de912879b94c1b3dfe
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975e3912879b94c1b3dff
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975e8912879b94c1b3e00
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975ee912879b94c1b3e01
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975f3912879b94c1b3e02
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975f7912879b94c1b3e03
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7975fc912879b94c1b3e04
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797601912879b94c1b3e05
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797607912879b94c1b3e06
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79760c912879b94c1b3e07
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797611912879b94c1b3e08
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797616912879b94c1b3e09
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79761b912879b94c1b3e0a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797620912879b94c1b3e0b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797625912879b94c1b3e0c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79762a912879b94c1b3e0d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79762f912879b94c1b3e0e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797634912879b94c1b3e0f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797639912879b94c1b3e10
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79763f912879b94c1b3e11
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797643912879b94c1b3e12
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797648912879b94c1b3e13
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79764d912879b94c1b3e14
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797652912879b94c1b3e15
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797658912879b94c1b3e16
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79765d912879b94c1b3e17
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797662912879b94c1b3e18
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797667912879b94c1b3e19
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79766c912879b94c1b3e1a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797671912879b94c1b3e1b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797676912879b94c1b3e1c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79767b912879b94c1b3e1d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797680912879b94c1b3e1e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797685912879b94c1b3e1f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79768a912879b94c1b3e20
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79768f912879b94c1b3e21
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797695912879b94c1b3e22
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79769a912879b94c1b3e23
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79769f912879b94c1b3e24
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976a3912879b94c1b3e25
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976a8912879b94c1b3e26
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976ae912879b94c1b3e27
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976b3912879b94c1b3e28
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976b8912879b94c1b3e29
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976bd912879b94c1b3e2a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976c2912879b94c1b3e2b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976c7912879b94c1b3e2c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976cc912879b94c1b3e2d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976d1912879b94c1b3e2e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976d6912879b94c1b3e2f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976db912879b94c1b3e30
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976e0912879b94c1b3e31
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976e5912879b94c1b3e32
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976ea912879b94c1b3e33
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976ef912879b94c1b3e34
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976f4912879b94c1b3e35
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976f9912879b94c1b3e36
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7976fe912879b94c1b3e37
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797703912879b94c1b3e38
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797708912879b94c1b3e39
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79770e912879b94c1b3e3a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797713912879b94c1b3e3b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797718912879b94c1b3e3c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79771d912879b94c1b3e3d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797722912879b94c1b3e3e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797727912879b94c1b3e3f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79772d912879b94c1b3e40
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797732912879b94c1b3e41
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797736912879b94c1b3e42
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79773c912879b94c1b3e43
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797741912879b94c1b3e44
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797746912879b94c1b3e45
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79774c912879b94c1b3e46
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797750912879b94c1b3e47
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797755912879b94c1b3e48
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79775b912879b94c1b3e49
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79775f912879b94c1b3e4a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797764912879b94c1b3e4b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79776a912879b94c1b3e4c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79776e912879b94c1b3e4d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797776912879b94c1b3e4e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79777b912879b94c1b3e4f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79777f912879b94c1b3e50
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797784912879b94c1b3e51
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797789912879b94c1b3e52
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79778f912879b94c1b3e53
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797794912879b94c1b3e54
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79779a912879b94c1b3e55
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79779e912879b94c1b3e56
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977a3912879b94c1b3e57
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977a9912879b94c1b3e58
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977ad912879b94c1b3e59
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977b3912879b94c1b3e5a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977b8912879b94c1b3e5b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977bc912879b94c1b3e5c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977c3912879b94c1b3e5d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977c8912879b94c1b3e5e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977cc912879b94c1b3e5f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977d1912879b94c1b3e60
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977d6912879b94c1b3e61
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977dd912879b94c1b3e62
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977e2912879b94c1b3e63
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977e6912879b94c1b3e64
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977ec912879b94c1b3e65
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977f2912879b94c1b3e66
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977f6912879b94c1b3e67
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7977fe912879b94c1b3e68
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797801912879b94c1b3e69
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797805912879b94c1b3e6a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79780c912879b94c1b3e6b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797812912879b94c1b3e6c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797817912879b94c1b3e6d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79781b912879b94c1b3e6e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797824912879b94c1b3e6f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797827912879b94c1b3e70
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79782f912879b94c1b3e71
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797834912879b94c1b3e72
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797839912879b94c1b3e73
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797840912879b94c1b3e74
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797842912879b94c1b3e75
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79784c912879b94c1b3e76
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797850912879b94c1b3e77
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79785d912879b94c1b3e78
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797862912879b94c1b3e79
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797872912879b94c1b3e7a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797879912879b94c1b3e7b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79787d912879b94c1b3e7c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797882912879b94c1b3e7d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79788a912879b94c1b3e7e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79788e912879b94c1b3e7f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797895912879b94c1b3e80
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79789b912879b94c1b3e81
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978a4912879b94c1b3e82
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978a8912879b94c1b3e83
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978b0912879b94c1b3e84
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978b4912879b94c1b3e85
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978b9912879b94c1b3e86
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978be912879b94c1b3e87
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978c4912879b94c1b3e88
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978c9912879b94c1b3e89
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978ce912879b94c1b3e8a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978db912879b94c1b3e8b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978e2912879b94c1b3e8c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978e7912879b94c1b3e8d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978ee912879b94c1b3e8e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978f1912879b94c1b3e8f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978f7912879b94c1b3e90
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7978fc912879b94c1b3e91
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797903912879b94c1b3e92
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797906912879b94c1b3e93
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79790b912879b94c1b3e94
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797911912879b94c1b3e95
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797915912879b94c1b3e96
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79791b912879b94c1b3e97
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797920912879b94c1b3e98
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797926912879b94c1b3e99
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79792b912879b94c1b3e9a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797932912879b94c1b3e9b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797937912879b94c1b3e9c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79793b912879b94c1b3e9d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797940912879b94c1b3e9e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797945912879b94c1b3e9f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79794a912879b94c1b3ea0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797950912879b94c1b3ea1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797953912879b94c1b3ea2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79795f912879b94c1b3ea3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797962912879b94c1b3ea4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797967912879b94c1b3ea5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79796e912879b94c1b3ea6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797972912879b94c1b3ea7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79797a912879b94c1b3ea8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79797f912879b94c1b3ea9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797984912879b94c1b3eaa
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79798a912879b94c1b3eab
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79798e912879b94c1b3eac
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797995912879b94c1b3ead
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a79799a912879b94c1b3eae
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979a0912879b94c1b3eaf
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979a6912879b94c1b3eb0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979ad912879b94c1b3eb1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979b3912879b94c1b3eb2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979b7912879b94c1b3eb3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979bd912879b94c1b3eb4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979c5912879b94c1b3eb5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979cb912879b94c1b3eb6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979d6912879b94c1b3eb7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979de912879b94c1b3eb8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979e4912879b94c1b3eb9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979eb912879b94c1b3eba
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979f2912879b94c1b3ebb
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a7979f8912879b94c1b3ebc
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a02912879b94c1b3ebd
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a06912879b94c1b3ebe
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a0c912879b94c1b3ebf
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a10912879b94c1b3ec0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a14912879b94c1b3ec1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a1c912879b94c1b3ec2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a23912879b94c1b3ec3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a2a912879b94c1b3ec4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a31912879b94c1b3ec5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a36912879b94c1b3ec6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a3c912879b94c1b3ec7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a42912879b94c1b3ec8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a5c912879b94c1b3ec9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a71912879b94c1b3eca
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797a91912879b94c1b3ecb
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797aa5912879b94c1b3ecc
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ab2912879b94c1b3ecd
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ab9912879b94c1b3ece
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ad1912879b94c1b3ecf
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ae8912879b94c1b3ed0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797af9912879b94c1b3ed1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b07912879b94c1b3ed2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b0e912879b94c1b3ed3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b18912879b94c1b3ed4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b21912879b94c1b3ed5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b29912879b94c1b3ed6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b32912879b94c1b3ed7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b38912879b94c1b3ed8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b47912879b94c1b3ed9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b4d912879b94c1b3eda
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b55912879b94c1b3edb
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b5c912879b94c1b3edc
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b61912879b94c1b3edd
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b70912879b94c1b3ede
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b75912879b94c1b3edf
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b7a912879b94c1b3ee0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b84912879b94c1b3ee1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b90912879b94c1b3ee2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797b9a912879b94c1b3ee3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ba3912879b94c1b3ee4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bab912879b94c1b3ee5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bb7912879b94c1b3ee6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bc0912879b94c1b3ee7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bc5912879b94c1b3ee8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bcb912879b94c1b3ee9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bcf912879b94c1b3eea
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bd6912879b94c1b3eeb
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bdd912879b94c1b3eec
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797be6912879b94c1b3eed
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bee912879b94c1b3eee
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bf4912879b94c1b3eef
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797bfc912879b94c1b3ef0
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c03912879b94c1b3ef1
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c09912879b94c1b3ef2
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c0e912879b94c1b3ef3
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c15912879b94c1b3ef4
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c1d912879b94c1b3ef5
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c22912879b94c1b3ef6
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c26912879b94c1b3ef7
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c30912879b94c1b3ef8
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c35912879b94c1b3ef9
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c3b912879b94c1b3efa
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c40912879b94c1b3efb
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c44912879b94c1b3efc
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c49912879b94c1b3efd
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c51912879b94c1b3efe
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c54912879b94c1b3eff
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c59912879b94c1b3f00
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c61912879b94c1b3f01
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c72912879b94c1b3f02
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c7a912879b94c1b3f03
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c81912879b94c1b3f04
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c86912879b94c1b3f05
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c8e912879b94c1b3f06
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c96912879b94c1b3f07
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797c9c912879b94c1b3f08
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ca2912879b94c1b3f09
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ca8912879b94c1b3f0a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cae912879b94c1b3f0b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cb5912879b94c1b3f0c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cbf912879b94c1b3f0d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cc6912879b94c1b3f0e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ccf912879b94c1b3f0f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cd4912879b94c1b3f10
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cdb912879b94c1b3f11
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ce0912879b94c1b3f12
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ce8912879b94c1b3f13
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cf0912879b94c1b3f14
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cf6912879b94c1b3f15
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797cfb912879b94c1b3f16
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d01912879b94c1b3f17
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d07912879b94c1b3f18
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d0d912879b94c1b3f19
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d13912879b94c1b3f1a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d1e912879b94c1b3f1b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d28912879b94c1b3f1c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d35912879b94c1b3f1d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d3d912879b94c1b3f1e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d43912879b94c1b3f1f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d51912879b94c1b3f20
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d58912879b94c1b3f21
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d5c912879b94c1b3f22
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d62912879b94c1b3f23
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d67912879b94c1b3f24
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d6d912879b94c1b3f25
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d71912879b94c1b3f26
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d75912879b94c1b3f27
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d7c912879b94c1b3f28
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d83912879b94c1b3f29
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d8a912879b94c1b3f2a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d90912879b94c1b3f2b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d95912879b94c1b3f2c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d9a912879b94c1b3f2d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797d9f912879b94c1b3f2e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797da3912879b94c1b3f2f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797da9912879b94c1b3f30
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797daf912879b94c1b3f31
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797db4912879b94c1b3f32
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797db8912879b94c1b3f33
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dbd912879b94c1b3f34
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dc2912879b94c1b3f35
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dc7912879b94c1b3f36
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dcd912879b94c1b3f37
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dd3912879b94c1b3f38
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dd9912879b94c1b3f39
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ddf912879b94c1b3f3a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797de2912879b94c1b3f3b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797de9912879b94c1b3f3c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dee912879b94c1b3f3d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797dfb912879b94c1b3f3e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e03912879b94c1b3f3f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e0a912879b94c1b3f40
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e0e912879b94c1b3f41
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e19912879b94c1b3f42
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e1f912879b94c1b3f43
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e24912879b94c1b3f44
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e28912879b94c1b3f45
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e2e912879b94c1b3f46
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e32912879b94c1b3f47
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e39912879b94c1b3f48
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e3e912879b94c1b3f49
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e40912879b94c1b3f4a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e48912879b94c1b3f4b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e4e912879b94c1b3f4c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e52912879b94c1b3f4d
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e58912879b94c1b3f4e
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e5e912879b94c1b3f4f
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e64912879b94c1b3f50
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e6a912879b94c1b3f51
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e6e912879b94c1b3f52
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e74912879b94c1b3f53
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e78912879b94c1b3f54
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e7d912879b94c1b3f55
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e81912879b94c1b3f56
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797e8f912879b94c1b3f57
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ea5912879b94c1b3f58
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797eb0912879b94c1b3f59
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ebd912879b94c1b3f5a
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797ed7912879b94c1b3f5b
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients
+INFO:backend.backend.main:Accident detection saved to DB with ID: 6a797eec912879b94c1b3f5c
+INFO:backend.backend.main:Accident alert broadcasted to 0 clients

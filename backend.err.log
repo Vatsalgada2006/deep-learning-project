@@ -1,0 +1,541 @@
+INFO:     Started server process [30084]
+INFO:     Waiting for application startup.
+INFO:main:Starting Road Accident Detection System...
+INFO:main:ONNX model loaded successfully from C:\Users\vatsa\OneDrive\Documents\dl-project\backend\backend\model.onnx
+INFO:main:Model input: input_layer_3:0, output: Identity:0
+INFO:main:Connected to MongoDB successfully
+WARNING:main:Video file not found at ./sample_video.mp4. Using simulated frames.
+INFO:main:Startup complete
+INFO:main:Starting video frame processing task...
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:main:Accident detection saved to DB with ID: 6a7efccb75cf889ba82f9a07
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcd075cf889ba82f9a08
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcd575cf889ba82f9a09
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcda75cf889ba82f9a0a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcdf75cf889ba82f9a0b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efce475cf889ba82f9a0c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efce975cf889ba82f9a0d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcee75cf889ba82f9a0e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcf375cf889ba82f9a0f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcf875cf889ba82f9a10
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efcfd75cf889ba82f9a11
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd0275cf889ba82f9a12
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd0775cf889ba82f9a13
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd0d75cf889ba82f9a14
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd1275cf889ba82f9a15
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd1775cf889ba82f9a16
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd1c75cf889ba82f9a17
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd2175cf889ba82f9a18
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd2675cf889ba82f9a19
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd2b75cf889ba82f9a1a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd3075cf889ba82f9a1b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd3575cf889ba82f9a1c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd3a75cf889ba82f9a1d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd3f75cf889ba82f9a1e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd4475cf889ba82f9a1f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd4975cf889ba82f9a20
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd4e75cf889ba82f9a21
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:     127.0.0.1:58884 - "WebSocket /ws/alerts" [accepted]
+INFO:     connection open
+INFO:main:WebSocket connected. Total connections: 1
+INFO:main:Accident detection saved to DB with ID: 6a7efd5375cf889ba82f9a22
+INFO:main:Accident alert broadcasted to 1 clients
+INFO:main:WebSocket disconnected. Total connections: 0
+INFO:main:Accident detection saved to DB with ID: 6a7efd5875cf889ba82f9a23
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd5d75cf889ba82f9a24
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd6275cf889ba82f9a25
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd6875cf889ba82f9a26
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd6d75cf889ba82f9a27
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd7275cf889ba82f9a28
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd7775cf889ba82f9a29
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd7c75cf889ba82f9a2a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd8175cf889ba82f9a2b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd8675cf889ba82f9a2c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd8b75cf889ba82f9a2d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd9075cf889ba82f9a2e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd9575cf889ba82f9a2f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd9a75cf889ba82f9a30
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efd9f75cf889ba82f9a31
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efda475cf889ba82f9a32
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efda975cf889ba82f9a33
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdae75cf889ba82f9a34
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdb375cf889ba82f9a35
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdb875cf889ba82f9a36
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdbd75cf889ba82f9a37
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdc275cf889ba82f9a38
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdc775cf889ba82f9a39
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdcc75cf889ba82f9a3a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdd175cf889ba82f9a3b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdd675cf889ba82f9a3c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efddb75cf889ba82f9a3d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efde075cf889ba82f9a3e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efde575cf889ba82f9a3f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdea75cf889ba82f9a40
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdf075cf889ba82f9a41
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdf575cf889ba82f9a42
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdfa75cf889ba82f9a43
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efdff75cf889ba82f9a44
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe0475cf889ba82f9a45
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe0975cf889ba82f9a46
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe0e75cf889ba82f9a47
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe1375cf889ba82f9a48
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe1875cf889ba82f9a49
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe1d75cf889ba82f9a4a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe2275cf889ba82f9a4b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe2775cf889ba82f9a4c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe2c75cf889ba82f9a4d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe3175cf889ba82f9a4e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe3675cf889ba82f9a4f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe3b75cf889ba82f9a50
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe4075cf889ba82f9a51
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe4575cf889ba82f9a52
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe4a75cf889ba82f9a53
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe4f75cf889ba82f9a54
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe5475cf889ba82f9a55
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe5975cf889ba82f9a56
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe5e75cf889ba82f9a57
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe6375cf889ba82f9a58
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe6875cf889ba82f9a59
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe6e75cf889ba82f9a5a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe7375cf889ba82f9a5b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe7875cf889ba82f9a5c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe7d75cf889ba82f9a5d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe8275cf889ba82f9a5e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe8775cf889ba82f9a5f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe8c75cf889ba82f9a60
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe9175cf889ba82f9a61
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe9675cf889ba82f9a62
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efe9b75cf889ba82f9a63
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efea075cf889ba82f9a64
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efea575cf889ba82f9a65
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efeaa75cf889ba82f9a66
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efeaf75cf889ba82f9a67
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efeb475cf889ba82f9a68
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efeb975cf889ba82f9a69
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efebe75cf889ba82f9a6a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efec375cf889ba82f9a6b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efec875cf889ba82f9a6c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efecd75cf889ba82f9a6d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efed275cf889ba82f9a6e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efed775cf889ba82f9a6f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efedc75cf889ba82f9a70
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efee175cf889ba82f9a71
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efee675cf889ba82f9a72
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efeeb75cf889ba82f9a73
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efef075cf889ba82f9a74
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efef575cf889ba82f9a75
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efefa75cf889ba82f9a76
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efeff75cf889ba82f9a77
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff0475cf889ba82f9a78
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff0975cf889ba82f9a79
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff0e75cf889ba82f9a7a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff1375cf889ba82f9a7b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff1875cf889ba82f9a7c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff1d75cf889ba82f9a7d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff2275cf889ba82f9a7e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff2875cf889ba82f9a7f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff2d75cf889ba82f9a80
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff3275cf889ba82f9a81
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff3775cf889ba82f9a82
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff3c75cf889ba82f9a83
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff4175cf889ba82f9a84
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff4675cf889ba82f9a85
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff4b75cf889ba82f9a86
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff5075cf889ba82f9a87
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff5575cf889ba82f9a88
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff5a75cf889ba82f9a89
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff5f75cf889ba82f9a8a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff6475cf889ba82f9a8b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff6975cf889ba82f9a8c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff6e75cf889ba82f9a8d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff7375cf889ba82f9a8e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff7875cf889ba82f9a8f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff7d75cf889ba82f9a90
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff8275cf889ba82f9a91
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff8775cf889ba82f9a92
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff8c75cf889ba82f9a93
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff9175cf889ba82f9a94
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff9675cf889ba82f9a95
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7eff9c75cf889ba82f9a96
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effa175cf889ba82f9a97
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effa675cf889ba82f9a98
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effab75cf889ba82f9a99
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effb075cf889ba82f9a9a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effb575cf889ba82f9a9b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effba75cf889ba82f9a9c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effbf75cf889ba82f9a9d
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effc475cf889ba82f9a9e
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effc975cf889ba82f9a9f
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effce75cf889ba82f9aa0
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effd375cf889ba82f9aa1
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effd875cf889ba82f9aa2
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effdd75cf889ba82f9aa3
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effe275cf889ba82f9aa4
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effe775cf889ba82f9aa5
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7effec75cf889ba82f9aa6
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efff275cf889ba82f9aa7
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efff775cf889ba82f9aa8
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7efffc75cf889ba82f9aa9
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f000175cf889ba82f9aaa
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f000675cf889ba82f9aab
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f000b75cf889ba82f9aac
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f001075cf889ba82f9aad
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f001575cf889ba82f9aae
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f001a75cf889ba82f9aaf
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f001f75cf889ba82f9ab0
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f002475cf889ba82f9ab1
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f002975cf889ba82f9ab2
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f002e75cf889ba82f9ab3
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f003375cf889ba82f9ab4
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f003875cf889ba82f9ab5
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f003d75cf889ba82f9ab6
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f004275cf889ba82f9ab7
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f004775cf889ba82f9ab8
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f004c75cf889ba82f9ab9
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f005175cf889ba82f9aba
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f005675cf889ba82f9abb
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f005b75cf889ba82f9abc
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f006075cf889ba82f9abd
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f006575cf889ba82f9abe
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f006a75cf889ba82f9abf
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f006f75cf889ba82f9ac0
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f007575cf889ba82f9ac1
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f007a75cf889ba82f9ac2
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f007f75cf889ba82f9ac3
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f008475cf889ba82f9ac4
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f008975cf889ba82f9ac5
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f008e75cf889ba82f9ac6
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f009375cf889ba82f9ac7
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f009875cf889ba82f9ac8
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f009d75cf889ba82f9ac9
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00a275cf889ba82f9aca
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00a775cf889ba82f9acb
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00ac75cf889ba82f9acc
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00b175cf889ba82f9acd
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00b675cf889ba82f9ace
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00bb75cf889ba82f9acf
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00c075cf889ba82f9ad0
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00c575cf889ba82f9ad1
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00ca75cf889ba82f9ad2
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00cf75cf889ba82f9ad3
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00d475cf889ba82f9ad4
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00d975cf889ba82f9ad5
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00de75cf889ba82f9ad6
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00e375cf889ba82f9ad7
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00e875cf889ba82f9ad8
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00ed75cf889ba82f9ad9
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00f275cf889ba82f9ada
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00f775cf889ba82f9adb
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f00fc75cf889ba82f9adc
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f010175cf889ba82f9add
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f010675cf889ba82f9ade
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f010b75cf889ba82f9adf
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f011075cf889ba82f9ae0
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f011575cf889ba82f9ae1
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f011a75cf889ba82f9ae2
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f011f75cf889ba82f9ae3
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f012475cf889ba82f9ae4
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f012a75cf889ba82f9ae5
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f012f75cf889ba82f9ae6
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f013475cf889ba82f9ae7
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f013975cf889ba82f9ae8
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f013e75cf889ba82f9ae9
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f014375cf889ba82f9aea
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f014875cf889ba82f9aeb
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f014d75cf889ba82f9aec
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f015275cf889ba82f9aed
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f015775cf889ba82f9aee
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f015c75cf889ba82f9aef
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f016175cf889ba82f9af0
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f016675cf889ba82f9af1
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f016b75cf889ba82f9af2
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f017075cf889ba82f9af3
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f017575cf889ba82f9af4
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f017a75cf889ba82f9af5
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f017f75cf889ba82f9af6
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f018475cf889ba82f9af7
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f018975cf889ba82f9af8
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f018e75cf889ba82f9af9
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f019375cf889ba82f9afa
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f019875cf889ba82f9afb
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f019d75cf889ba82f9afc
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01a275cf889ba82f9afd
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01a775cf889ba82f9afe
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01ac75cf889ba82f9aff
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01b175cf889ba82f9b00
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01b675cf889ba82f9b01
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01bb75cf889ba82f9b02
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01c175cf889ba82f9b03
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01c675cf889ba82f9b04
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01cb75cf889ba82f9b05
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01d075cf889ba82f9b06
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01d575cf889ba82f9b07
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01da75cf889ba82f9b08
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01df75cf889ba82f9b09
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01e475cf889ba82f9b0a
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01e975cf889ba82f9b0b
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01ee75cf889ba82f9b0c
+INFO:main:Accident alert broadcasted to 0 clients
+INFO:main:Accident detection saved to DB with ID: 6a7f01f375cf889ba82f9b0d
+INFO:main:Accident alert broadcasted to 0 clients

@@ -1,0 +1,32 @@
+# Road Accident Detection System - Docker Compose
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=/app/backend/model.onnx
+      - VIDEO_PATH=/app/backend/sample_video.mp4
+      - MONGO_URI=mongodb://mongo:27017/accident_detection
+    volumes:
+      - ./model_output:/app/backend/model_output  # For accessing trained model
+      - ./datasets:/app/backend/datasets:ro       # Read-only access to datasets
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  # Frontend will be deployed separately to Vercel
+  # For local development, run: npm run dev
+
+volumes:
+  mongo_data:
