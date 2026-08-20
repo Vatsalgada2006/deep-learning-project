@@ -1,0 +1,9 @@
+{
+  "build": {
+    "dockerfile": "./backend/Dockerfile"
+  },
+  "deploy": {
+    "restartPolicy": "ON_FAILURE",
+    "restartLimit": 3
+  }
+}
