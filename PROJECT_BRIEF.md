@@ -3,7 +3,7 @@
 Give this whole file to Claude Code as your first message. Save it as `CLAUDE.md`
 in the repo root too, so Claude Code re-reads it automatically in future sessions.
 
-## What I'm building
+## What I'm building;
 
 A full-stack, portfolio-grade web app that detects road accidents in real time
 from CCTV-style video using a CNN-LSTM deep learning model, shows live alerts on
