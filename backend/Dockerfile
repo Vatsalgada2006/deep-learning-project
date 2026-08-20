@@ -10,15 +10,17 @@ RUN apt-get update && apt-get install -y \
     libsm6 \
     libxext6 \
     libxrender-dev \
-    libgpio-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
-COPY requirements.txt .
+COPY backend/backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY backend/backend/ ./backend/
+COPY model.onnx ./backend/          # ML model from repo root
+COPY backend/.env ./backend/        # Environment file
+
 WORKDIR /app/backend
 
 # Create non-root user for security
