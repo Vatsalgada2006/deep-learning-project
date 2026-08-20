@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/backend/ ./backend/
 
 # Copy ML model
-COPY model.onnx ./backend/
+COPY backend/model.onnx ./backend/
 
 # Expose port
 EXPOSE 8000
