@@ -219,7 +219,7 @@ road-accident-detection-system/
 ## �� 🎯 Success Criteria Validation Complete
 
 The system has successfully met the non-negotiable success criteria from CLAUDE.md:
-> **Model accuracy**: CNN-LSTM must beat the baseline CNN on F1-score and ROC-AUC, not just raw accuracy
+> **Model accuracy**: CNN-LSTM must beat the baseline CNN on F1-score and ROC-AUC, not just raw accuracy.
 
 We have now validated both improvements and can proceed immediately with backend/frontend integration and deployment preparation.
 
