@@ -21,7 +21,7 @@ COPY backend/backend/ ./
 
 # Copy ML model and sample video
 COPY ../model.onnx ./
-COPY ../sample_video.mp4 ./
+COPY ../sample_video.mp4 ._
 
 # Expose port
 EXPOSE 8000
