@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY backend/backend/ ./backend/
 COPY model.onnx ./backend/          # ML model from repo root
-COPY backend/.env ./backend/        # Environment file
+COPY .env ./backend/.env            # Environment file from repo root
 
 WORKDIR /app/backend
 
