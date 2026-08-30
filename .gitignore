@@ -1,58 +1,115 @@
-datasets/
-accident_model_output/
-node_modules/
-# Model files (large)
-backend/model.onnx
-accident_model_output-*.zip
+# =========================
+# Ignored files and directories
+# =========================
 
-# Backup files
-*.bak
-*~
-
-# Log files
+# Logs
 *.log
-backend/backend/*.log
-backend.log
-frontend*.log
-latency.log
 
-# Python cache
+# Environment variables
+.env
+.env.*
+!/.env.example
+!/backend/.env.example
+
+# Virtual environments
+**/venv/
+**/.venv/
+**/env/
+**/.env/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Virtual environments
-venv/
-.env/
-.venv/
-training/venv_training/
+# PyTorch
+*.pth
+*.pt
+*.h5
+*.ckpt
 
-# Environment variables (may contain secrets)
-.env
-.env.*
-!/.env.example  # Keep the example file
-!/backend/.env.example  # Keep the example file
+# Model files (large)
+backend/model.onnx
+accident_model_output/
+model_output/
+model_training/
+training/
 
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
+# Data
+datasets/
+
+# Build outputs
+dist/
+build/
+**/dist/
+**/build/
+
+# Backup files
 *~
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# gitleaks
-gitleaks_install/
-gitleaks.exe
-gitleaks.zip
+*.bak
+*.tmp
 
 # Documentation backups
 *_bak.md
 *.md.bak
 
-# Build outputs
-dist/
-build/
+# Miscellaneous
+gitleaks_install/
+gitleaks.exe
+gitleaks.zip
+.claude/
+memory/
+*.pid
+
+# Frontend specific
+# We keep the src/ and public/ but ignore any build outputs inside them
+# Vite build outputs
+# Note: We are keeping the following:
+# - src/ (frontend source)
+# - public/ (frontend static assets)
+# - backend/ (backend source, but note: the code is in backend/backend/)
+# - We are ignoring the model file and logs and venv inside backend/
+
+# We are not ignoring the following because they are small and useful:
+# - requirements.txt
+# - package.json, package-lock.json
+# - tsconfig.json, vite.config.ts, tailwind.config.js, postcss.config.js
+# - Dockerfile, docker-compose.yml, railway.json
+# - LICENSE, README.md
