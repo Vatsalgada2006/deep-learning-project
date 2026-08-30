@@ -1,0 +1,23 @@
+Files that should be added to .gitignore:
+1. backend/model.onnx (large model file)
+2. *.bak files
+3. *.log files
+4. *~ backup files
+5. __pycache__ directories
+6. .venv/, venv/, training/venv_training/ directories
+7. .env files (if they contain real credentials)
+8. gitleaks_install/, gitleaks.exe, gitleaks.zip
+9. STATUS_UPDATE.md.bak, MILESTONE_PLAN.md.bak
+10. backend/backend/*.log files
+
+Currently tracked large files:
+-rw-r--r-- 1 vatsa 197609 47847874 Aug  8 00:42 accident_model_output-20260807T191203Z-1-001.zip
+-rw-r--r-- 1 vatsa 197609 10361758 Aug  9 09:59 backend/model.onnx
+-rw-r--r-- 1 vatsa 197609  1088171 Aug  5 03:23 dist/assets/index-CZaIKy18.js
+-rw-r--r-- 1 vatsa 197609   763200 Aug  5 02:34 TY-AI&DS-12,34-DL-CIAP-CASE_STUDY-REPORT.pdf
+-rw-r--r-- 1 vatsa 197609   178892 Aug 14 20:51 backend/server.log
+-rw-r--r-- 1 vatsa 197609    98085 Aug  5 03:22 package-lock.json
+-rw-r--r-- 1 vatsa 197609    58901 Aug 10 13:04 server8.log
+-rw-r--r-- 1 vatsa 197609    46845 Aug 12 02:31 server5.log
+-rw-r--r-- 1 vatsa 197609    34239 Aug 14 17:24 backend.err.log
+-rw-r--r-- 1 vatsa 197609    28604 Aug 12 02:31 server6.log
