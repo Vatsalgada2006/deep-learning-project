@@ -1,3 +1,58 @@
 datasets/
 accident_model_output/
 node_modules/
+# Model files (large)
+backend/model.onnx
+accident_model_output-*.zip
+
+# Backup files
+*.bak
+*~
+
+# Log files
+*.log
+backend/backend/*.log
+backend.log
+frontend*.log
+latency.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.venv/
+training/venv_training/
+
+# Environment variables (may contain secrets)
+.env
+.env.*
+!/.env.example  # Keep the example file
+!/backend/.env.example  # Keep the example file
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# gitleaks
+gitleaks_install/
+gitleaks.exe
+gitleaks.zip
+
+# Documentation backups
+*_bak.md
+*.md.bak
+
+# Build outputs
+dist/
+build/
