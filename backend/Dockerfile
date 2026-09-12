@@ -13,16 +13,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY backend/backend/requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY backend/backend/ ./backend/
-COPY backend/model.onnx ./backend/
-COPY backend/sample_video.mp4 ./backend/
+# Copy application code and ONNX model (sample video is optional; missing file => NO INPUT)
+COPY backend/app/ ./app/
+COPY backend/model.onnx ./model.onnx
 
-# Expose port
+# Expose default port (platforms such as Railway override PORT)
+ENV PORT=8000
 EXPOSE 8000
 
-# Run the application - let Python code handle PORT from environment
-CMD ["python", "-m", "uvicorn", "backend.main:app", "--host", "0.0.0.0"]
+# Bind to the deployment PORT
+CMD ["sh", "-c", "python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]
