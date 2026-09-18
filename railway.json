@@ -1,6 +1,6 @@
 {
   "build": {
-    "dockerfile": "./backend/Dockerfile"
+    "dockerfile": "Dockerfile"
   },
   "deploy": {
     "restartPolicy": "ON_FAILURE",
