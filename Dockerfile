@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code and ONNX model (sample video is optional; missing file => NO INPUT)
 COPY backend/app/ ./app/
-COPY backend/model.onnx ./model.onnx
+COPY backend/backend/model.onnx ./model.onnx
 
 # Expose default port (platforms such as Railway override PORT)
 ENV PORT=8000
