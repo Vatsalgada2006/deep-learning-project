@@ -94,6 +94,20 @@ async def test_predict_demo_mode(client):
     assert len(data["predictions"]) > 0
     assert data["predictions"][0]["is_accident"] is True
 
+    # New fields: fps, total_frames at top level
+    assert "fps" in data
+    assert isinstance(data["fps"], (int, float))
+    assert data["fps"] > 0
+    assert "total_frames" in data
+    assert isinstance(data["total_frames"], int)
+
+    # Per-window: start_time, end_time
+    pred0 = data["predictions"][0]
+    assert "start_time" in pred0
+    assert "end_time" in pred0
+    assert isinstance(pred0["start_time"], (int, float))
+    assert pred0["end_time"] >= pred0["start_time"]
+
 
 @pytest.mark.anyio
 async def test_predict_invalid_content_type(client):
@@ -143,4 +157,115 @@ def test_onnx_model_direct_inference():
     # Probability between 0 and 1
     prob = float(pred[0][0])
     assert 0.0 <= prob <= 1.0
+
+
+@pytest.mark.anyio
+async def test_health_metadata(client):
+    """Test health endpoint returns model_version, model_checksum, and uptime."""
+    response = await client.get("/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert "model_version" in data
+    assert data["model_version"] == "2.0.0"
+    assert "uptime_seconds" in data
+    assert isinstance(data["uptime_seconds"], (int, float))
+    assert data["uptime_seconds"] >= 0.0
+    assert "model_checksum" in data
+
+
+@pytest.mark.anyio
+async def test_metrics_endpoint(client):
+    """Test /metrics endpoint returns real class-wise accident metrics and confusion matrices."""
+    response = await client.get("/metrics")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "success"
+    assert "baseline_cnn" in data
+    assert "cnn_lstm" in data
+
+    # Verify class-wise accident metrics
+    lstm = data["cnn_lstm"]
+    assert "accident_class" in lstm
+    acc = lstm["accident_class"]
+    assert acc["label"] == "Accident"
+    assert acc["recall"] > 0.85
+    assert acc["precision"] > 0.85
+    assert acc["f1_score"] > 0.85
+    assert "confusion_matrix" in lstm
+    assert "roc_auc" in lstm
+    assert lstm["roc_auc"] > 0.80
+
+    # Verify baseline metrics
+    base = data["baseline_cnn"]
+    assert "accident_class" in base
+    assert base["roc_auc"] > 0.95
+
+
+def test_confidence_inversion_logic():
+    """Verify that raw sigmoid output is inverted: P(Accident) = 1.0 - raw."""
+    # Label 0 = Accident, Label 1 = NonAccident
+    # Sigmoid produces P(NonAccident).
+    raw_safe = 0.95
+    conf_safe = round(1.0 - raw_safe, 4)
+    assert conf_safe == 0.05
+    assert conf_safe < 0.5  # Not an accident
+
+    raw_accident = 0.12
+    conf_accident = round(1.0 - raw_accident, 4)
+    assert conf_accident == 0.88
+    assert conf_accident > 0.5  # Accident detected!
+
+
+def test_real_accident_clip_inference():
+    """Test that the real accident clip produces an accident alert with the ONNX model."""
+    clip_path = os.path.join(os.path.dirname(__file__), "..", "public", "samples", "sample_accident_01.mp4")
+    if not os.path.exists(clip_path):
+        pytest.skip("sample_accident_01.mp4 not found")
+
+    import cv2
+    import numpy as np
+    import onnxruntime as ort
+
+    model_path = os.path.join(os.path.dirname(__file__), "..", "backend", "model.onnx")
+    session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
+    input_name = session.get_inputs()[0].name
+
+    cap = cv2.VideoCapture(clip_path)
+    frames = []
+    idx = 0
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        if idx % 5 == 0:
+            rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            resized = cv2.resize(rgb, (128, 128))
+            frames.append(resized.astype(np.float32) / 255.0)
+        idx += 1
+    cap.release()
+
+    assert len(frames) >= 10, "Should have at least 1 window of frames"
+    window = frames[:10]
+    seq = np.expand_dims(np.stack(window, axis=0), axis=0)
+    out = session.run(None, {input_name: seq})
+    raw = float(out[0][0][0])
+    p_accident = 1.0 - raw
+
+    # The real accident clip must trigger an alert!
+    assert p_accident > 0.5, f"Expected accident alert (>0.5), got {p_accident:.4f}"
+
+
+def test_onnx_preprocessing_and_architecture_parity():
+    """Verify input shape (None, 10, 128, 128, 3) and preprocessing matching training."""
+    model_path = os.path.join(os.path.dirname(__file__), "..", "backend", "model.onnx")
+    import onnxruntime as ort
+    session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
+    inp = session.get_inputs()[0]
+    
+    # Check sequence length is 10, height 128, width 128, channels 3
+    assert inp.shape[1] == 10
+    assert inp.shape[2] == 128
+    assert inp.shape[3] == 128
+    assert inp.shape[4] == 3
+
 

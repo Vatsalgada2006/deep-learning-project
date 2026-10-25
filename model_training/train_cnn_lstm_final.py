@@ -270,10 +270,13 @@ def main():
     # Create output directory
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Define class folders (adjust if your dataset uses different names)
-    # Based on your structure: Accident/Accident/ and NonAccident/NonAccident/
-    class_folders = ['Accident', 'NonAccident']  # Updated to match your dataset
-    class_names = {0: 'NonAccident', 1: 'Accident'}  # Mapping for labels
+    # Define class folders (Accident/Accident/ and NonAccident/NonAccident/)
+    class_folders = ['Accident', 'NonAccident']
+    class_indices = {class_name: idx for idx, class_name in enumerate(class_folders)}
+    class_names = {idx: class_name for idx, class_name in enumerate(class_folders)}
+    print(f"Verified label mapping: class_indices = {class_indices}")
+    print(f"Class 0 = {class_names[0]} (Accident), Class 1 = {class_names[1]} (NonAccident)")
+    print("Sigmoid output P(Y=1) is P(NonAccident). Accident confidence = 1.0 - sigmoid.")
 
     # Create datasets
     print('Creating datasets...')
