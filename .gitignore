@@ -2,8 +2,11 @@
 # Ignored files and directories
 # =========================
 
-# Logs
+# Logs and videos
 *.log
+*.mp4
+*.avi
+
 
 # Environment variables
 .env
@@ -66,7 +69,6 @@ MANIFEST
 *.ckpt
 
 # Model files (large)
-backend/model.onnx
 accident_model_output/
 model_output/
 model_training/
@@ -111,5 +113,5 @@ memory/
 # - requirements.txt
 # - package.json, package-lock.json
 # - tsconfig.json, vite.config.ts, tailwind.config.js, postcss.config.js
-# - Dockerfile, docker-compose.yml, railway.json
+# - Dockerfile, docker-compose.yml, render.yaml, vercel.json
 # - LICENSE, README.md

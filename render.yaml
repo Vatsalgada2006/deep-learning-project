@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: road-accident-detection-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerContext: .
+    dockerfilePath: backend/Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: MODEL_PATH
+        value: "./model.onnx"
+      - key: DEMO_MODE
+        value: "false"
+      - key: ALLOWED_ORIGINS
+        value: "http://localhost:5173,https://your-frontend.vercel.app"
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB_NAME
+        value: "accident_detection"
+      - key: DISCORD_WEBHOOK_URL
+        sync: false
+      - key: MAX_UPLOAD_BYTES
+        value: "10485760"
+      - key: MAX_VIDEO_DURATION_S
+        value: "15"
+      - key: FRAME_SAMPLE_INTERVAL
+        value: "5"
+      - key: FRAME_RESIZE_WIDTH
+        value: "320"
+      - key: LOG_LEVEL
+        value: "INFO"
