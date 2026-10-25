@@ -124,7 +124,6 @@ export async function apiFetch<T = any>(
       lastError = err;
 
       const isAbort = err.name === 'AbortError';
-      const isWaking = (err instanceof ApiError && err.isServerWaking) || isAbort;
 
       if (attempts <= retries) {
         const backoff = retryDelayMs * Math.pow(1.5, attempts - 1);

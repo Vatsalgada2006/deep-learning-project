@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { apiFetch, API_BASE, WS_URL, ApiError } from './utils/apiClient';
+import { apiFetch, WS_URL, ApiError } from './utils/apiClient';
 import { evaluatePredictionsAtThreshold } from './utils/threshold';
 
 // =====================================================================
