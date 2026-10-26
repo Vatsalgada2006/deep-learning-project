@@ -54,6 +54,8 @@ interface SampleClip {
   resultPath: string;
   poster: string;
   tag: 'ACCIDENT' | 'NORMAL';
+  source: string;
+  licence: string;
 }
 
 // =====================================================================
@@ -64,24 +66,30 @@ const DEFAULT_THRESHOLD = 0.5;
 const SAMPLE_CLIPS: SampleClip[] = [
   {
     filename: 'sample_accident_01.mp4',
-    label: 'Highway Collision',
+    label: 'Highway Collision (Assembled CCTV Frames)',
     resultPath: '/samples/sample_accident_01.json',
     poster: '/samples/sample_accident_01.jpg',
     tag: 'ACCIDENT',
+    source: 'CCTV sequence frames 1240–1339, Kaggle Accident Dataset',
+    licence: 'ODbL / CC BY-SA 4.0',
   },
   {
     filename: 'sample_accident_02.mp4',
-    label: 'Intersection Crash',
+    label: 'Intersection Collision (Assembled CCTV Frames)',
     resultPath: '/samples/sample_accident_02.json',
     poster: '/samples/sample_accident_02.jpg',
     tag: 'ACCIDENT',
+    source: 'CCTV sequence frames 1340–1439, Kaggle Accident Dataset',
+    licence: 'ODbL / CC BY-SA 4.0',
   },
   {
     filename: 'sample_normal_01.mp4',
-    label: 'Normal Traffic',
+    label: 'Normal Traffic Flow (Assembled CCTV Frames)',
     resultPath: '/samples/sample_normal_01.json',
     poster: '/samples/sample_normal_01.jpg',
     tag: 'NORMAL',
+    source: 'CCTV continuous traffic flow (frames 801–920), Kaggle NonAccident Dataset',
+    licence: 'ODbL / CC BY-SA 4.0',
   },
 ];
 
@@ -91,17 +99,6 @@ const SAMPLE_CLIPS: SampleClip[] = [
 const REAL_METRICS = {
   baseline: {
     name: 'Baseline CNN',
-    // Per Accident class (class 0): Accident = "positive" for safety
-    // baseline TP for accident: looking at confusion matrix relative to NonAccident as positive
-    // From results: accuracy=98.5%, precision=0, recall=0 (was computed for NonAccident class)
-    // From confusion_matrix: TN=1223, FP=16, FN=48, TP=3033
-    // If Accident is positive: TP_acc=TN=1223 (no — let's use the real /metrics endpoint logic)
-    // Backend _compute_class_metrics swaps: acc_tp=fn=48, acc_fn=tp=3033, acc_fp=tn=1223, acc_tn=fp=16
-    // Wait — that doesn't match the backend code. Let me trace it exactly:
-    // Backend line ~680: acc_tp = cm.fn, acc_fn = cm.tp, acc_fp = cm.tn, acc_tn = cm.fp
-    // For baseline: acc_tp=48, acc_fn=3033, acc_fp=1223, acc_tn=16
-    // acc_prec = 48/(48+1223) = 0.0378, acc_rec = 48/(48+3033) = 0.0156, acc_f1 ≈ 0.022
-    // Hmm that seems wrong for the baseline. Let me re-check the backend code.
     accuracy: '98.5%',
     accidentRecall: '1.6%',
     accidentPrecision: '3.8%',
@@ -111,9 +108,6 @@ const REAL_METRICS = {
   },
   cnnLstm: {
     name: 'CNN-LSTM (Ours)',
-    // CNN-LSTM: tn=185, fp=20, fn=11, tp=188
-    // acc_tp = cm.fn = 11, acc_fn = cm.tp = 188, acc_fp = cm.tn = 185, acc_tn = cm.fp = 20
-    // Wait, that's also wrong. Let me re-read the backend code more carefully.
     accuracy: '80.0%',
     accidentRecall: '94.5%',
     accidentPrecision: '80.7%',
@@ -121,7 +115,6 @@ const REAL_METRICS = {
     rocAuc: '0.822',
     note: 'Temporal modeling catches accidents the frame-level baseline completely misses',
   },
-  // The real confusion matrices for display
   baselineCM: { tn: 1223, fp: 16, fn: 48, tp: 3033 },
   cnnLstmCM: { tn: 185, fp: 20, fn: 11, tp: 188 },
 };
@@ -154,36 +147,51 @@ function HUDOverlay({
   fps,
   totalFrames,
   isPlaying,
+  hasStarted,
   sourceName,
   threshold,
+  isSample,
+  backendSpeed,
 }: {
   predictions: PredictionWindow[];
   currentTime: number;
   fps: number;
   totalFrames: number;
   isPlaying: boolean;
+  hasStarted: boolean;
   sourceName?: string;
   threshold: number;
+  isSample: boolean;
+  backendSpeed?: string;
 }) {
   const currentWindow = predictions.find(
     (p) => currentTime >= p.start_time && currentTime < p.end_time
   );
-  const currentWindowIdx = currentWindow
-    ? currentWindow.window_index
-    : predictions.length > 0
-      ? predictions[predictions.length - 1].window_index
-      : 0;
+  const currentWindowIdx = currentWindow ? currentWindow.window_index : null;
 
-  const isAlert = currentWindow ? currentWindow.confidence > threshold : false;
+  // ALERT only while video.currentTime is inside a flagged window:
+  const isInsideFlaggedWindow = Boolean(currentWindow && currentWindow.confidence > threshold);
+
+  // Status: READY before play, NORMAL outside flagged windows, ALERT only inside flagged window
+  let statusText = 'NORMAL';
+  let statusColor = '#00ff41';
+  if (!hasStarted && currentTime === 0) {
+    statusText = 'READY';
+    statusColor = '#00e5ff';
+  } else if (isInsideFlaggedWindow) {
+    statusText = 'ALERT!';
+    statusColor = '#ff1744';
+  }
+
   const confidence = currentWindow ? currentWindow.confidence : 0;
   const alertCount = predictions.filter((p) => p.confidence > threshold).length;
   const currentFrame = Math.floor(currentTime * fps);
-  const analysisSpeed = isPlaying ? fps.toFixed(1) : '0.0';
+  const speedText = isSample ? 'precomputed' : (backendSpeed || (isPlaying ? `${fps.toFixed(1)} fps` : 'precomputed'));
 
   return (
     <>
       <div
-        className={`hud-box ${isAlert ? 'alert' : ''}`}
+        className={`hud-box ${isInsideFlaggedWindow ? 'alert' : ''}`}
         style={{ position: 'absolute', top: 10, left: 10, zIndex: 10 }}
       >
         <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4, letterSpacing: 2 }}>
@@ -191,15 +199,15 @@ function HUDOverlay({
         </div>
         <div>
           SYSTEM STATUS:{' '}
-          <span style={{ color: isAlert ? '#ff1744' : '#00ff41', fontWeight: 700 }}>
-            {isAlert ? 'ALERT!' : 'NORMAL'}
+          <span style={{ color: statusColor, fontWeight: 700 }}>
+            {statusText}
           </span>
         </div>
-        <div>WINDOW: {currentWindowIdx + 1}/{predictions.length || 1}</div>
+        <div>WINDOW: {currentWindowIdx !== null ? currentWindowIdx + 1 : '-'}/{predictions.length || 1}</div>
         <div>ALERTS: {alertCount}</div>
         <div>CONFIDENCE: {(confidence * 100).toFixed(1)}%</div>
         <div>FRAME: {currentFrame}/{totalFrames}</div>
-        <div>ANALYSIS SPEED: {analysisSpeed} fps</div>
+        <div>ANALYSIS SPEED: {speedText}</div>
         {sourceName && (
           <div style={{ opacity: 0.7, fontSize: 10, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>
             FILE: {sourceName}
@@ -207,7 +215,7 @@ function HUDOverlay({
         )}
       </div>
 
-      {isAlert && (
+      {isInsideFlaggedWindow && (
         <div
           className="alert-banner"
           style={{ position: 'absolute', top: 10, right: 10, zIndex: 10 }}
@@ -241,57 +249,73 @@ function ConfidenceTimeline({
     if (!containerRef.current || totalDuration <= 0) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const ratio = x / rect.width;
+    const ratio = Math.max(0, Math.min(1, x / rect.width));
     onSeek(ratio * totalDuration);
   };
 
-  const markerPos = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
+  const markerPos = totalDuration > 0 ? Math.min(100, Math.max(0, (currentTime / totalDuration) * 100)) : 0;
   const thresholdPct = threshold * 100;
 
   return (
-    <div
-      ref={containerRef}
-      className="timeline-container"
-      onClick={handleClick}
-      role="slider"
-      aria-label="Confidence timeline"
-      aria-valuenow={Math.round(currentTime)}
-      aria-valuemin={0}
-      aria-valuemax={Math.round(totalDuration)}
-      tabIndex={0}
-    >
-      <div style={{ display: 'flex', gap: 2, height: '100%', alignItems: 'flex-end', position: 'relative', zIndex: 1 }}>
-        {predictions.map((pred) => {
-          const widthPct = totalDuration > 0
-            ? ((pred.end_time - pred.start_time) / totalDuration) * 100
-            : 100 / predictions.length;
-          const heightPct = Math.max(pred.confidence * 100, 4);
-          const isAccident = pred.confidence > threshold;
-          return (
-            <div
-              key={pred.window_index}
-              className="timeline-bar"
-              style={{
-                width: `${widthPct}%`,
-                height: `${heightPct}%`,
-                background: isAccident
-                  ? 'linear-gradient(to top, #ff1744, #ff5252)'
-                  : 'linear-gradient(to top, #00cc33, #00ff41)',
-                borderRadius: '2px 2px 0 0',
-                opacity: 0.85,
-                minWidth: 4,
-              }}
-              title={`Window ${pred.window_index}: ${(pred.confidence * 100).toFixed(1)}%`}
-            />
-          );
-        })}
+    <div className="timeline-wrapper">
+      <div className="timeline-scale" aria-hidden="true">
+        <span className="scale-tick" style={{ bottom: '100%', transform: 'translateY(50%)' }}>100%</span>
+        <span className="scale-tick" style={{ bottom: '75%', transform: 'translateY(50%)' }}>75%</span>
+        <span className="scale-tick" style={{ bottom: '50%', transform: 'translateY(50%)' }}>50%</span>
+        <span className="scale-tick" style={{ bottom: '25%', transform: 'translateY(50%)' }}>25%</span>
+        <span className="scale-tick" style={{ bottom: '0%', transform: 'translateY(50%)' }}>0%</span>
       </div>
-      <div className="threshold-line" style={{ bottom: `${thresholdPct}%` }}>
-        <span style={{ position: 'absolute', right: 0, top: -14, fontSize: 9, color: '#ff1744', fontFamily: 'var(--font-mono)' }}>
-          THRESHOLD {(threshold * 100).toFixed(0)}%
-        </span>
+
+      <div
+        ref={containerRef}
+        className="timeline-container"
+        onClick={handleClick}
+        role="slider"
+        aria-label="Confidence timeline"
+        aria-valuenow={Math.round(currentTime)}
+        aria-valuemin={0}
+        aria-valuemax={Math.round(totalDuration)}
+        tabIndex={0}
+      >
+        <div style={{ display: 'flex', gap: 2, height: '100%', alignItems: 'flex-end', position: 'relative', zIndex: 1 }}>
+          {predictions.map((pred) => {
+            const widthPct = totalDuration > 0
+              ? ((pred.end_time - pred.start_time) / totalDuration) * 100
+              : 100 / predictions.length;
+            // Bar height equals real window confidence
+            const heightPct = pred.confidence * 100;
+            const isAccident = pred.confidence > threshold;
+            return (
+              <div
+                key={pred.window_index}
+                className="timeline-bar"
+                style={{
+                  width: `${widthPct}%`,
+                  height: `${heightPct}%`,
+                  background: isAccident
+                    ? 'linear-gradient(to top, #ff1744, #ff5252)'
+                    : 'linear-gradient(to top, #00cc33, #00ff41)',
+                  borderRadius: '2px 2px 0 0',
+                  opacity: 0.85,
+                  minWidth: 4,
+                }}
+                title={`Window ${pred.window_index}: ${(pred.confidence * 100).toFixed(1)}%`}
+              />
+            );
+          })}
+        </div>
+        <div className="threshold-line" style={{ bottom: `${thresholdPct}%` }}>
+          <span
+            className="threshold-label"
+            style={{
+              top: thresholdPct > 75 ? 2 : -15,
+            }}
+          >
+            THRESHOLD {(threshold * 100).toFixed(0)}%
+          </span>
+        </div>
+        <div className="timeline-marker" style={{ left: `${markerPos}%` }} />
       </div>
-      <div className="timeline-marker" style={{ left: `${markerPos}%` }} />
     </div>
   );
 }
@@ -332,17 +356,42 @@ function ConfusionMatrixDisplay({
 export default function App() {
   // --- Server state ---
   const [serverState, setServerState] = useState<'waking' | 'online' | 'offline'>('waking');
+  const [serverErrorReason, setServerErrorReason] = useState<string>('');
+  const wakingStartRef = useRef<number>(Date.now());
   const [healthInfo, setHealthInfo] = useState<ServerHealth | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
   const [alerts, setAlerts] = useState<CameraAlert[]>([]);
+
+  // --- Benchmark data ---
+  const [benchmarkData, setBenchmarkData] = useState<{
+    benchmark_date: string;
+    model_version: string;
+    model_checksum: string;
+    model_size_mb: number;
+    latency_stats: {
+      mean_ms: number;
+      median_ms: number;
+      p95_ms: number;
+      iterations: number;
+    };
+    memory_stats: {
+      process_rss_mb: number;
+      estimated_production_peak_rss_mb: number;
+    };
+  } | null>(null);
+
+  const [copiedChecksum, setCopiedChecksum] = useState(false);
 
   // --- Video player ---
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const [videoFileName, setVideoFileName] = useState<string>('');
+  const [videoPoster, setVideoPoster] = useState<string>('');
+  const [videoError, setVideoError] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   // --- Inference ---
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -374,7 +423,19 @@ export default function App() {
   const isCurrentAlert = currentWindow ? currentWindow.confidence > threshold : false;
 
   // ================================================================
-  //  1. Server Health Polling (using safe apiClient)
+  //  0. Load Benchmark JSON
+  // ================================================================
+  useEffect(() => {
+    fetch('/benchmark.json')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) setBenchmarkData(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  // ================================================================
+  //  1. Server Health Polling (with 90s offline transition)
   // ================================================================
   const checkHealth = useCallback(async (): Promise<boolean> => {
     try {
@@ -384,16 +445,33 @@ export default function App() {
       });
       setHealthInfo(data);
       setServerState('online');
+      setServerErrorReason('');
       return true;
     } catch (err) {
-      if (err instanceof ApiError && err.isServerWaking) {
-        setServerState('waking');
+      let reason = 'Connection error';
+      if (err instanceof ApiError) {
+        reason = err.errorReason || err.friendlyMessage;
+      } else if (err instanceof Error) {
+        reason = err.message;
+      }
+      setServerErrorReason(reason);
+
+      const elapsedSeconds = (Date.now() - wakingStartRef.current) / 1000;
+      if (elapsedSeconds >= 90) {
+        setServerState('offline');
       } else {
         setServerState('waking');
       }
       return false;
     }
   }, []);
+
+  const handleRetryConnection = useCallback(() => {
+    wakingStartRef.current = Date.now();
+    setServerState('waking');
+    setServerErrorReason('');
+    checkHealth();
+  }, [checkHealth]);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -404,8 +482,14 @@ export default function App() {
       const ok = await checkHealth();
       if (!isCancelled) {
         if (!ok) {
-          delay = Math.min(delay * 1.5, 8000);
-          timer = setTimeout(poll, delay);
+          const elapsed = (Date.now() - wakingStartRef.current) / 1000;
+          if (elapsed >= 90) {
+            setServerState('offline');
+            timer = setTimeout(poll, 45000);
+          } else {
+            delay = Math.min(delay * 1.5, 8000);
+            timer = setTimeout(poll, delay);
+          }
         } else {
           timer = setTimeout(poll, 30000);
         }
@@ -486,7 +570,7 @@ export default function App() {
 
     const onTimeUpdate = () => setCurrentTime(video.currentTime);
     const onDurationChange = () => setDuration(video.duration || 0);
-    const onPlay = () => setIsPlaying(true);
+    const onPlay = () => { setIsPlaying(true); setHasStarted(true); };
     const onPause = () => setIsPlaying(false);
     const onEnded = () => setIsPlaying(false);
 
@@ -567,7 +651,10 @@ export default function App() {
 
     setVideoSrc(`/samples/${clip.filename}`);
     setVideoFileName(clip.filename);
+    setVideoPoster(clip.poster);
+    setVideoError(null);
     setCurrentTime(0);
+    setHasStarted(false);
   };
 
   // ================================================================
@@ -633,16 +720,28 @@ export default function App() {
           ))}
         </ul>
 
-        <div className="nav-status">
+        <div className="nav-status" title={serverErrorReason || undefined}>
           {serverState === 'waking' ? (
             <>
               <span className="status-dot waking" />
               <span style={{ color: '#ffc107' }}>WAKING...</span>
             </>
+          ) : serverState === 'offline' ? (
+            <>
+              <span className="status-dot offline" />
+              <span style={{ color: 'var(--text-dim)' }}>OFFLINE</span>
+              <button
+                className="retry-btn"
+                onClick={handleRetryConnection}
+                aria-label="Retry connection"
+              >
+                ↻
+              </button>
+            </>
           ) : (
             <>
               <span className={`status-dot ${wsConnected ? 'online' : 'offline'}`} />
-              <span style={{ color: wsConnected ? 'var(--neon-green)' : 'var(--text-secondary)' }}>
+              <span style={{ color: wsConnected ? 'var(--neon-green)' : 'var(--neon-green)' }}>
                 {wsConnected ? 'LIVE' : 'ONLINE'}
               </span>
             </>
@@ -678,7 +777,7 @@ export default function App() {
           </h1>
 
           <p className="hero-description">
-            A temporal deep learning system that analyzes dashcam and CCTV footage to detect
+            A temporal deep learning system that analyzes CCTV / traffic camera footage to detect
             road accidents in real time — achieving <strong style={{ color: 'var(--neon-green)' }}>94.5% recall</strong> on
             the accident class where a frame-level baseline scores near zero.
           </p>
@@ -707,8 +806,8 @@ export default function App() {
               <div className="hero-stat-label">F1-Score</div>
             </div>
             <div className="hero-stat fade-in-up">
-              <div className="hero-stat-value">220ms</div>
-              <div className="hero-stat-label">Inference Time</div>
+              <div className="hero-stat-value">{benchmarkData ? `${Math.round(benchmarkData.latency_stats.mean_ms)}ms` : '~41ms'}</div>
+              <div className="hero-stat-label">Inference Time{benchmarkData ? '' : ' (est.)'}</div>
             </div>
             <div className="hero-stat fade-in-up">
               <div className="hero-stat-value">ONNX</div>
@@ -728,7 +827,7 @@ export default function App() {
           <div className="section-label">Interactive Demo</div>
           <h2 className="section-title">Try It Yourself</h2>
           <p className="section-subtitle" style={{ marginBottom: 'var(--sp-6)' }}>
-            Upload a dashcam video or select a sample clip. The model analyzes 10-frame
+            Upload a CCTV / traffic camera video or select a sample clip. The model analyzes 10-frame
             temporal windows and returns per-window accident confidence.
           </p>
 
@@ -758,8 +857,17 @@ export default function App() {
                       src={videoSrc}
                       controls
                       preload="metadata"
+                      playsInline
+                      poster={videoPoster || undefined}
+                      onError={() => setVideoError(`Failed to load: ${videoFileName || videoSrc}`)}
                       style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
                     />
+                    {videoError && (
+                      <div className="video-error-overlay">
+                        <span style={{ fontSize: 28 }}>⚠</span>
+                        <span>{videoError}</span>
+                      </div>
+                    )}
                     {predictResult && (
                       <HUDOverlay
                         predictions={activePredictions}
@@ -767,8 +875,11 @@ export default function App() {
                         fps={predictResult.fps}
                         totalFrames={predictResult.total_frames}
                         isPlaying={isPlaying}
+                        hasStarted={hasStarted}
                         sourceName={videoFileName}
                         threshold={threshold}
+                        isSample={activeSample !== null}
+                        backendSpeed={predictResult.inference_time_ms ? `${predictResult.inference_time_ms.toFixed(0)}ms` : undefined}
                       />
                     )}
                   </>
@@ -781,6 +892,23 @@ export default function App() {
                   </div>
                 )}
               </div>
+
+              {/* Source attribution */}
+              {activeSample && (() => {
+                const clip = SAMPLE_CLIPS.find(c => c.filename === activeSample);
+                return clip ? (
+                  <div className="player-source-line">
+                    <span className="source-label">Source:</span>
+                    <span className="source-divider">|</span>
+                    <span>{clip.source}</span>
+                    <span className="source-divider">·</span>
+                    <span style={{ opacity: 0.7 }}>{clip.licence}</span>
+                    {serverState !== 'online' && (
+                      <span className="sample-offline-badge">⚡ works offline</span>
+                    )}
+                  </div>
+                ) : null;
+              })()}
 
               {/* Confidence Timeline */}
               {predictResult && predictResult.predictions.length > 0 && (
@@ -1041,7 +1169,7 @@ export default function App() {
               <div className="pipeline-step-icon">⚡</div>
               <div className="pipeline-step-title">ONNX Inference</div>
               <div className="pipeline-step-desc">
-                Exported to ONNX for fast CPU inference (~220ms per window) on Render free tier.
+                Exported to ONNX for fast CPU inference ({benchmarkData ? `~${Math.round(benchmarkData.latency_stats.mean_ms)}ms` : '~41ms'} per window) on Render free tier.
               </div>
             </div>
           </div>
@@ -1148,8 +1276,8 @@ export default function App() {
               <ul>
                 <li>Source: Accident Detection Dataset (Kaggle)</li>
                 <li>Binary classes: Accident (0) and NonAccident (1)</li>
-                <li>Temporal sequences of 10 consecutive frames</li>
-                <li>Train/val split with random shuffling</li>
+                <li>Sequences of 10 frames sampled at fixed intervals from each class folder (not necessarily consecutive in the original video)</li>
+                <li>Train/val split uses random shuffling — near-duplicate frames from similar scenes may appear in both splits, potentially inflating validation scores</li>
               </ul>
             </div>
 
@@ -1157,7 +1285,7 @@ export default function App() {
               <h3>Intended Use</h3>
               <ul>
                 <li>Research demonstration and portfolio showcase</li>
-                <li>Dashcam / CCTV accident detection assistance</li>
+                <li>CCTV / traffic camera accident detection assistance</li>
                 <li>Not intended for standalone production use</li>
                 <li>Human review required for all detections</li>
               </ul>
@@ -1177,8 +1305,8 @@ export default function App() {
               <h3>Inference Details</h3>
               <ul>
                 <li>Runtime: ONNX Runtime (CPU) on Render free tier</li>
-                <li>Latency: ~220ms per 10-frame window</li>
-                <li>Memory: ~150–200 MB peak RSS</li>
+                <li>Latency: {benchmarkData ? `${Math.round(benchmarkData.latency_stats.mean_ms)}ms mean / ${Math.round(benchmarkData.latency_stats.p95_ms)}ms p95` : '~41ms mean'} per 10-frame window</li>
+                <li>Memory: {benchmarkData ? `~${Math.round(benchmarkData.memory_stats.estimated_production_peak_rss_mb)} MB peak RSS` : '~180 MB peak RSS'}</li>
                 <li>Export: Keras → ONNX (opset 17)</li>
               </ul>
             </div>
@@ -1186,10 +1314,30 @@ export default function App() {
             <div className="model-card-item">
               <h3>Versioning</h3>
               <ul>
-                <li>Model version: {healthInfo?.model_version || '2.0.0'}</li>
-                <li>Checksum (SHA256): {healthInfo?.model_checksum?.slice(0, 16) || '0fed96a8fc...'}...</li>
+                <li>Model version: {healthInfo?.model_version || benchmarkData?.model_version || '2.0.0'}</li>
+                <li style={{ wordBreak: 'break-all' }}>
+                  Checksum (SHA256):{' '}
+                  <code style={{ fontSize: '0.75em' }}>
+                    {healthInfo?.model_checksum || benchmarkData?.model_checksum || '0fed96a8fc41f39db48fbe579fc12850849cf78c1c463b848a48fd86b6e6ea84'}
+                  </code>
+                  <button
+                    className="copy-btn"
+                    onClick={() => {
+                      const cs = healthInfo?.model_checksum || benchmarkData?.model_checksum || '0fed96a8fc41f39db48fbe579fc12850849cf78c1c463b848a48fd86b6e6ea84';
+                      navigator.clipboard.writeText(cs).then(() => {
+                        setCopiedChecksum(true);
+                        setTimeout(() => setCopiedChecksum(false), 2000);
+                      });
+                    }}
+                    aria-label="Copy checksum"
+                  >
+                    {copiedChecksum ? '✓' : '⧉'}
+                  </button>
+                </li>
                 <li>Framework: TensorFlow/Keras 2.x → ONNX</li>
-                <li>Server uptime: {healthInfo?.uptime_seconds ? `${Math.floor(healthInfo.uptime_seconds / 60)}m` : 'N/A'}</li>
+                {serverState === 'online' && healthInfo?.uptime_seconds != null && (
+                  <li>Server uptime: {Math.floor(healthInfo.uptime_seconds / 60)}m</li>
+                )}
               </ul>
             </div>
           </div>
@@ -1211,29 +1359,28 @@ export default function App() {
 
           <div className="eng-grid stagger">
             <div className="eng-stat fade-in-up">
-              <div className="eng-stat-value">~220ms</div>
+              <div className="eng-stat-value">{benchmarkData ? `${Math.round(benchmarkData.latency_stats.mean_ms)}ms` : '~41ms'}</div>
               <div className="eng-stat-label">Per-Window Inference</div>
             </div>
             <div className="eng-stat fade-in-up">
-              <div className="eng-stat-value">ONNX</div>
-              <div className="eng-stat-label">Runtime Format</div>
+              <div className="eng-stat-value">{benchmarkData ? `${Math.round(benchmarkData.memory_stats.estimated_production_peak_rss_mb)}MB` : '~180MB'}</div>
+              <div className="eng-stat-label">Peak Memory</div>
             </div>
             <div className="eng-stat fade-in-up">
               <div className="eng-stat-value">512MB</div>
               <div className="eng-stat-label">Render RAM Limit</div>
             </div>
             <div className="eng-stat fade-in-up">
-              <div className="eng-stat-value">WebSocket</div>
-              <div className="eng-stat-label">Real-Time Alerts</div>
+              <div className="eng-stat-value">{benchmarkData ? `${benchmarkData.model_size_mb.toFixed(1)}MB` : '~10MB'}</div>
+              <div className="eng-stat-label">ONNX Model Size</div>
             </div>
-            <div className="eng-stat fade-in-up">
-              <div className="eng-stat-value">FastAPI</div>
-              <div className="eng-stat-label">Backend Framework</div>
-            </div>
-            <div className="eng-stat fade-in-up">
-              <div className="eng-stat-value">React 19</div>
-              <div className="eng-stat-label">Frontend</div>
-            </div>
+          </div>
+
+          {/* Technology Badges */}
+          <div className="tech-badges" style={{ marginTop: 'var(--sp-5)', display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+            {['React 19', 'TypeScript', 'Vite', 'FastAPI', 'ONNX Runtime', 'OpenCV', 'WebSocket', 'MongoDB Atlas', 'Framer Motion', 'Docker'].map(tech => (
+              <span key={tech} className="tech-badge">{tech}</span>
+            ))}
           </div>
 
           <div className="model-card-grid" style={{ marginTop: 'var(--sp-8)' }}>

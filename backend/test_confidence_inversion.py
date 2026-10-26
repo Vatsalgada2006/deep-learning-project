@@ -22,22 +22,26 @@ import numpy as np
 # ---------------------------------------------------------------------------
 
 def _make_stubs():
-    """Create lightweight stubs for heavy dependencies."""
-    # onnxruntime
-    ort_stub = types.ModuleType("onnxruntime")
-    ort_stub.InferenceSession = MagicMock
-    ort_stub.SessionOptions = MagicMock
-    ort_stub.GraphOptimizationLevel = MagicMock()
-    ort_stub.GraphOptimizationLevel.ORT_ENABLE_ALL = 0
-    sys.modules.setdefault("onnxruntime", ort_stub)
+    """Create lightweight stubs for heavy dependencies if not installed."""
+    try:
+        import onnxruntime
+    except ImportError:
+        ort_stub = types.ModuleType("onnxruntime")
+        ort_stub.InferenceSession = MagicMock
+        ort_stub.SessionOptions = MagicMock
+        ort_stub.GraphOptimizationLevel = MagicMock()
+        ort_stub.GraphOptimizationLevel.ORT_ENABLE_ALL = 0
+        sys.modules["onnxruntime"] = ort_stub
 
-    # motor (never needed here)
-    motor_stub = types.ModuleType("motor")
-    motor_async = types.ModuleType("motor.motor_asyncio")
-    motor_async.AsyncIOMotorClient = MagicMock
-    motor_stub.motor_asyncio = motor_async
-    sys.modules.setdefault("motor", motor_stub)
-    sys.modules.setdefault("motor.motor_asyncio", motor_async)
+    try:
+        import motor.motor_asyncio
+    except ImportError:
+        motor_stub = types.ModuleType("motor")
+        motor_async = types.ModuleType("motor.motor_asyncio")
+        motor_async.AsyncIOMotorClient = MagicMock
+        motor_stub.motor_asyncio = motor_async
+        sys.modules.setdefault("motor", motor_stub)
+        sys.modules.setdefault("motor.motor_asyncio", motor_async)
 
 
 _make_stubs()

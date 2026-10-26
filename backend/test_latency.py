@@ -1,7 +1,6 @@
 import websocket
 import json
 import time
-from websocket import rel
 
 def on_message(ws, message):
     try:

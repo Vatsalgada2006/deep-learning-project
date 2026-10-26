@@ -1,0 +1,39 @@
+{
+  "benchmark_date": "2026-10-26T14:45:22.293622+00:00",
+  "model_version": "2.0.0",
+  "model_checksum": "0fed96a8fc41f39db48fbe579fc12850849cf78c1c463b848a48fd86b6e6ea84",
+  "model_size_mb": 9.88,
+  "input_shape": [
+    1,
+    10,
+    128,
+    128,
+    3
+  ],
+  "latency_stats": {
+    "mean_ms": 41.36,
+    "median_ms": 40.74,
+    "p95_ms": 50.74,
+    "min_ms": 31.53,
+    "max_ms": 66.39,
+    "iterations": 50,
+    "effective_fps": 241.8
+  },
+  "memory_stats": {
+    "process_rss_mb": 115.38,
+    "model_memory_delta_mb": 47.83,
+    "render_free_tier_limit_mb": 512,
+    "estimated_production_peak_rss_mb": 180
+  },
+  "system_info": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 126 Stepping 5, GenuineIntel",
+    "python_version": "3.13.14",
+    "onnxruntime_version": "1.30.0"
+  },
+  "tests": {
+    "pytest_count": 13,
+    "vitest_count": 9,
+    "all_passing": true
+  }
+}

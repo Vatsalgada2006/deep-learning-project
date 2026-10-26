@@ -39,7 +39,7 @@
   --purple-accent: #ce93d8;
   --text-primary: #e8e8e8;
   --text-secondary: #999999;
-  --text-dim: #555555;
+  --text-dim: #888888;
   --border-color: #1f1f1f;
   --border-hover: #333333;
 
@@ -77,6 +77,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--neon-green);
+  outline-offset: 2px;
 }
 
 html {
@@ -574,6 +579,31 @@ body {
 }
 
 /* ---- Confidence Timeline ---- */
+.timeline-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-2);
+}
+
+.timeline-scale {
+  position: relative;
+  width: 32px;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+  height: 56px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.timeline-scale .scale-tick {
+  position: absolute;
+  right: 4px;
+  line-height: 1;
+}
+
 .timeline-container {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
@@ -582,6 +612,7 @@ body {
   position: relative;
   cursor: pointer;
   height: 56px;
+  flex: 1;
 }
 
 .timeline-bar {
@@ -598,6 +629,20 @@ body {
   border-top: 1px dashed var(--alert-red);
   pointer-events: none;
   z-index: 2;
+}
+
+.threshold-label {
+  position: absolute;
+  right: 6px;
+  font-size: 9px;
+  color: #ff1744;
+  font-family: var(--font-mono);
+  background: rgba(10, 10, 10, 0.85);
+  padding: 1px 5px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 23, 68, 0.5);
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .timeline-marker {
@@ -1175,6 +1220,235 @@ body {
 .stagger > *:nth-child(5) { animation-delay: 320ms; }
 .stagger > *:nth-child(6) { animation-delay: 400ms; }
 
+/* ---- Status Chip in Nav ---- */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 4px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  cursor: help;
+  transition: all var(--transition-fast);
+}
+
+.status-chip:hover {
+  border-color: var(--border-hover);
+}
+
+.retry-badge-btn {
+  background: transparent;
+  border: 1px solid var(--alert-red);
+  color: var(--alert-red);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  margin-left: 4px;
+  transition: all var(--transition-fast);
+}
+
+.retry-badge-btn:hover {
+  background: var(--alert-red);
+  color: white;
+}
+
+/* ---- Player Media Error Banner ---- */
+.player-error-banner {
+  background: rgba(255, 23, 68, 0.15);
+  border: 1px solid var(--alert-red);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-3) var(--sp-4);
+  color: #ff8a80;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.player-error-banner .error-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ---- Player Source Line ---- */
+.player-source-line {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.player-source-line .source-label {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.player-source-line .source-divider {
+  color: var(--border-hover);
+}
+
+/* ---- Video Duration Tag ---- */
+.video-duration-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+/* ---- Sample Offline Badge ---- */
+.sample-offline-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ---- Tech Badges ---- */
+.tech-badge-container {
+  margin-top: var(--sp-6);
+  padding: var(--sp-4);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.tech-badge-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--neon-green);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.tech-badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.tech-badge:hover {
+  border-color: var(--neon-green-border);
+  color: var(--neon-green);
+}
+
+/* ---- Copy Checksum Button ---- */
+.copy-checksum-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all var(--transition-fast);
+}
+
+.copy-checksum-btn:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+}
+
+.eng-stat-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ---- Retry Button (nav) ---- */
+.retry-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-dim);
+  font-size: 14px;
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-left: 4px;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.retry-btn:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+}
+
+/* ---- Video Error Overlay ---- */
+.video-error-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(15, 12, 20, 0.85);
+  color: #ff5252;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-align: center;
+  padding: var(--sp-4);
+  z-index: 12;
+}
+
+/* ---- Copy Button (checksum) ---- */
+.copy-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-left: 6px;
+  line-height: 1;
+  transition: all var(--transition-fast);
+}
+
+.copy-btn:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -1186,7 +1460,7 @@ body {
   }
 
   .nav-links {
-    display: none; /* hamburger can be added later */
+    display: none;
   }
 
   .section {
@@ -1219,6 +1493,39 @@ body {
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --text-4xl: 1.35rem;
+    --text-2xl: 1.1rem;
+    --text-base: 0.875rem;
+  }
+
+  .section {
+    padding: var(--sp-8) var(--sp-2);
+  }
+
+  .nav-inner {
+    padding: 0 var(--sp-2);
+  }
+
+  .timeline-scale {
+    display: none;
+  }
+
+  .hero-content {
+    padding: var(--sp-2);
+  }
+
+  .status-chip {
+    padding: 2px 6px;
+    font-size: 10px;
+  }
+
+  .eng-stat {
+    padding: var(--sp-3);
   }
 }
 

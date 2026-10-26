@@ -8,7 +8,7 @@
       "end_frame": 50,
       "start_time": 0.0,
       "end_time": 2.5,
-      "confidence": 0.0159,
+      "confidence": 0.0194,
       "is_accident": false
     },
     {
@@ -17,11 +17,11 @@
       "end_frame": 100,
       "start_time": 2.5,
       "end_time": 5.0,
-      "confidence": 0.0156,
+      "confidence": 0.0183,
       "is_accident": false
     }
   ],
-  "inference_time_ms": 100.26,
+  "inference_time_ms": 111.43,
   "frames_processed": 24,
   "fps": 20.0,
   "total_frames": 120

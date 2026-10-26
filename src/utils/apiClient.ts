@@ -19,13 +19,15 @@ export class ApiError extends Error {
   status: number;
   isServerWaking: boolean;
   friendlyMessage: string;
+  errorReason: string;
 
-  constructor(status: number, message: string, friendlyMessage: string, isServerWaking = false) {
+  constructor(status: number, message: string, friendlyMessage: string, isServerWaking = false, errorReason = '') {
     super(message);
     this.name = 'ApiError';
     this.status = status;
     this.friendlyMessage = friendlyMessage;
     this.isServerWaking = isServerWaking;
+    this.errorReason = errorReason || (isServerWaking ? 'Server waking up' : message);
   }
 }
 
@@ -136,14 +138,24 @@ export async function apiFetch<T = any>(
       }
 
       if (isAbort) {
-        throw new ApiError(408, 'Request Timeout', 'Server response timed out. The backend container may be cold-starting.', true);
+        throw new ApiError(
+          408,
+          'Request Timeout',
+          'Server response timed out. The backend container may be cold-starting.',
+          true,
+          'timeout'
+        );
       }
+
+      const isTypeError = err instanceof TypeError || (err.message && err.message.toLowerCase().includes('fetch'));
+      const reason = isTypeError ? 'CORS blocked or offline' : (err.message || 'connection failed');
 
       throw new ApiError(
         0,
         err.message || 'Network error',
         'Could not connect to accident detection backend. Retrying connection...',
-        true
+        true,
+        reason
       );
     }
   }

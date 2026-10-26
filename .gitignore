@@ -6,6 +6,8 @@
 *.log
 *.mp4
 *.avi
+!public/samples/*.mp4
+!backend/sample_video.mp4
 
 
 # Environment variables
