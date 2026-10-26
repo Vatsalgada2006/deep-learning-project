@@ -12,30 +12,36 @@ An autonomous, edge-ready road accident detection system combining a temporal **
 ## 🏛️ System Architecture
 
 ```text
-[ CCTV / Video Upload ] 
+[ CCTV / Video Upload / Web Worker WASM ] 
+          │
+          ├── [ Optional Client-Side Inference: ONNX Runtime Web (WASM) ]
           │
           ▼
 [ FastAPI Backend (Render Free Docker, <512MB RAM) ]
-   ├── ONNX Runtime (CPU, Multi-Stage Slim Image)
+   ├── ONNX Runtime (CPU, Multi-Stage Slim Image, ~41ms / window)
    ├── Sliding Window Sequence Extractor (10 frames @ 128x128)
+   ├── Incident Clustering Engine (k-Persistence + Cooldown Merging)
    ├── Concurrency Limiter (Single worker inference queue)
    └── TTL Auto-Cleanup Index (30-day auto-purge)
           │
-          ├──► [ MongoDB Atlas M0 ] ── Detection History
-          ├──► [ WebSocket /ws/alerts ] ── Real-Time Incident Stream
+          ├──► [ MongoDB Atlas M0 ] ── Incident Store (30-day TTL)
+          ├──► [ WebSocket /ws/alerts ] ── Real-Time Incident Broadcast
           └──► [ Discord Webhook (Optional) ] ── Push Notifications
                     │
                     ▼
 [ React 19 Frontend (Vercel Hobby) ]
-   ├── 3D Digital Twin (React Three Fiber / Three.js)
-   ├── 2D CCTV Matrix (Low-end hardware fallback)
-   ├── Video Upload & Sliding-Window Analysis UI
-   └── Render Cold-Start Wake-up Polling with Exponential Backoff
+   ├── Map Panel (Leaflet + OpenStreetMap) with Simulated Demo Cameras
+   ├── Live Incident Alert Feed (Newest first, Status Confirm/False Alarm)
+   ├── Incident Detail Drawer (Grad-CAM Attention Snapshot, Operator Notes)
+   ├── Client-Side JSON & RFC-4180 CSV Export
+   ├── Client vs Server Engine Parity Comparison Runner
+   ├── "How to Read This" & "Where It Fails" Empirical Transparency Panels
+   └── Render Cold-Start Wake-up Polling (Resolves Online/Offline ≤90s)
 ```
 
 ---
 
-## 📊 Model Performance & Evaluation
+## 📊 Model Performance & Measured Benchmarks
 
 The system utilizes a custom **CNN-LSTM** architecture trained on the Kaggle *Road Accidents from CCTV Footages* dataset. Because traffic surveillance is a safety-critical application, the model is specifically tuned to maximize **recall** to eliminate false negatives (unreported crashes).
 
@@ -47,28 +53,25 @@ The system utilizes a custom **CNN-LSTM** architecture trained on the Kaggle *Ro
 | **F1-Score** | 67.48% | **87.06** | Substantial gain in harmonic performance |
 | **ROC-AUC** | 0.8207 | **0.8220** | Strong discriminative ability across thresholds |
 
-> **Evaluation Takeaway:** Traffic incidents are fundamentally dynamic temporal sequences. Single-frame 2D CNNs frequently misclassify stationary parked vehicles or shadows as crashes. Incorporating an LSTM sequence layer over 10 consecutive frames resolves temporal context, elevating recall from 54.8% to 94.5%.
+### Real Measured Benchmark Numbers:
+- **Inference Latency:** ~41.2 ms per 10-frame window on standard CPU (`onnxruntime` CPUExecutionProvider).
+- **WASM Engine Parity:** Output discrepancy between Browser ONNX Runtime Web (WASM) and Python ONNX Runtime is $< 10^{-6}$ (dummy zeros raw score: `0.9840105` vs `0.9840106`).
+- **Continuous Sample Video:** `sample_continuous_01.mp4` (200 frames, 10.0s @ 20 fps, 1.19 MB H.264 `avc1`, `yuv420p`, peak model score: **0.0617** [Normal/Clean]).
+- **Image Sequence Pace:** Assembled stills play at 7 fps (0.35x natural pace) labeled *"Image sequence from dataset, not continuous video"*.
+- **Empirical Dataset Failure Modes:**
+  - *False Positive:* `NonAccident/11979.jpg` (score **0.5758**) — high-beam headlight reflections simulating wreckage glare.
+  - *Borderline Normal:* `NonAccident/12013.jpg` (score **0.4793**) — sudden braking and rapid lane cut-in.
+  - *False Negative:* `Accident/1424.jpg` (score **0.1606**) — distant collision obscured by heavy tree shadows.
+  - *Stationary Aftermath:* `Accident/129.jpg` (score **0.1873**) — post-crash stationary vehicle lacking temporal motion.
 
 ---
 
-## ⚡ Free-Tier Engineering & Constraints
+## ⚡ Incident Monitoring & Clustering Rules
 
-This project is architected specifically to run on zero-cost free-tier tiers:
-
-1. **Render Free Tier (<512 MB RAM):**
-   - No PyTorch, TensorFlow, or GUI OpenCV in the production image.
-   - Pure `onnxruntime` CPU execution provider with `opencv-python-headless`.
-   - Multi-stage slim Docker build.
-   - Strict 1-concurrent-inference guard returning HTTP 503 when busy.
-   - Cold-start handling: Frontend gracefully detects cold-starts and polls `/health` with exponential backoff before establishing WebSocket connections.
-
-2. **MongoDB Atlas M0 (512 MB Storage Limit):**
-   - MongoDB documents are capped to <4 KB.
-   - Built-in TTL index automatically purges incidents older than 30 days (`expireAfterSeconds: 2592000`).
-
-3. **Vercel Hobby (Frontend):**
-   - Static Vite production build with SPA rewrites (`vercel.json`).
-   - Graceful 3D degradation with React Error Boundaries falling back to a responsive 2D CCTV camera matrix.
+Rather than spamming operators with raw window detections, consecutive flagged windows are clustered into **Incidents**:
+1. **$k$-Persistence:** Requires at least $k$ (configurable, default 1 or 2) consecutive/near-consecutive flagged windows before registering an incident, suppressing single-frame false spikes.
+2. **Cooldown Merging:** Consecutive flagged windows within $c$ windows of each other (default 2 windows) are merged into **ONE** incident.
+3. **Audit Trail & Triage:** Operators can mark incidents as `confirmed` or `false_alarm`, append operational notes, and export incident records to structured JSON and CSV files.
 
 ---
 
@@ -77,9 +80,13 @@ This project is architected specifically to run on zero-cost free-tier tiers:
 | Method | Path | Description |
 |:---|:---|:---|
 | `GET` | `/health` | Server health, model loaded status, MongoDB connection, demo mode state |
-| `GET` | `/ping` | Lightweight ping probe |
-| `POST` | `/predict` | Upload video clip (`.mp4`, `.webm` ≤10 MB, ≤15s) for sliding-window inference |
-| `GET` | `/history` | Paginated incident log from MongoDB Atlas (`limit`, `offset`, `sort`) |
+| `GET` | `/ping` | Lightweight ping probe (resolves within 90s timeout) |
+| `GET` | `/cameras` | Registry of demo surveillance cameras (`id`, `name`, `label`, `lat`, `lon`) |
+| `POST` | `/predict` | Upload video clip; returns window predictions and merged `incidents` |
+| `GET` | `/incidents` | Paginated incident history (`limit`, `offset`, `status`, `camera_id`) |
+| `GET` | `/incidents/{id}` | Retrieve individual incident record |
+| `PATCH` | `/incidents/{id}` | Update incident status (`new`, `confirmed`, `false_alarm`) and operator notes |
+| `GET` | `/history` | Paginated legacy detection log from MongoDB Atlas |
 | `GET` | `/metrics` | Comparative benchmark metrics (Baseline CNN vs CNN-LSTM) |
 | `GET` | `/model-info` | ONNX input/output tensor shapes and configuration |
 | `WS` | `/ws/alerts` | Bidirectional real-time WebSocket connection for live incident broadcast |
@@ -124,6 +131,12 @@ python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8001 --reload
 ```bash
 # In the repository root
 npm install
+
+# Run frontend unit tests (Vitest)
+npm run test
+
+# Run frontend build
+npm run build
 
 # Start Vite dev server
 npm run dev

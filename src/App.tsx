@@ -1,7 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { apiFetch, WS_URL, ApiError } from './utils/apiClient';
+import {
+  apiFetch,
+  WS_URL,
+  ApiError,
+  fetchCameras,
+  fetchIncidents,
+  patchIncidentStatus,
+  predictVideoWithMeta,
+} from './utils/apiClient';
 import { evaluatePredictionsAtThreshold } from './utils/threshold';
+import { MapPanel, type CameraInfo } from './components/MapPanel';
+import { IncidentFeed } from './components/IncidentFeed';
+import { ClaritySections } from './components/ClaritySections';
+import { type Incident, clusterWindowsClient } from './utils/incidents';
+import { runBrowserInferenceOnVideo } from './utils/browserInference';
 
 // =====================================================================
 //  Types
@@ -34,6 +47,7 @@ interface PredictResult {
   fps: number;
   total_frames: number;
   peak_memory_mb?: number | null;
+  incidents?: Incident[];
 }
 
 interface ServerHealth {
@@ -56,6 +70,9 @@ interface SampleClip {
   tag: 'ACCIDENT' | 'NORMAL';
   source: string;
   licence: string;
+  isSequence: boolean;
+  naturalFps: number;
+  snapshot: string;
 }
 
 // =====================================================================
@@ -66,30 +83,51 @@ const DEFAULT_THRESHOLD = 0.5;
 const SAMPLE_CLIPS: SampleClip[] = [
   {
     filename: 'sample_accident_01.mp4',
-    label: 'Highway Collision (Assembled CCTV Frames)',
+    label: 'Highway Collision (Image sequence from dataset, not continuous video)',
     resultPath: '/samples/sample_accident_01.json',
     poster: '/samples/sample_accident_01.jpg',
     tag: 'ACCIDENT',
-    source: 'CCTV sequence frames 1240–1339, Kaggle Accident Dataset',
-    licence: 'ODbL / CC BY-SA 4.0',
+    isSequence: true,
+    naturalFps: 7,
+    source: 'CCTV sequence frames 1244–1339, Kaggle Accident Dataset',
+    licence: 'See dataset page (ODbL / CC BY-SA 4.0)',
+    snapshot: '/samples/sample_accident_01_gradcam.jpg',
   },
   {
     filename: 'sample_accident_02.mp4',
-    label: 'Intersection Collision (Assembled CCTV Frames)',
+    label: 'Intersection Collision (Image sequence from dataset, not continuous video)',
     resultPath: '/samples/sample_accident_02.json',
     poster: '/samples/sample_accident_02.jpg',
     tag: 'ACCIDENT',
+    isSequence: true,
+    naturalFps: 7,
     source: 'CCTV sequence frames 1340–1439, Kaggle Accident Dataset',
-    licence: 'ODbL / CC BY-SA 4.0',
+    licence: 'See dataset page (ODbL / CC BY-SA 4.0)',
+    snapshot: '/samples/sample_accident_02_gradcam.jpg',
   },
   {
     filename: 'sample_normal_01.mp4',
-    label: 'Normal Traffic Flow (Assembled CCTV Frames)',
+    label: 'Normal Traffic Flow (Image sequence from dataset, not continuous video)',
     resultPath: '/samples/sample_normal_01.json',
     poster: '/samples/sample_normal_01.jpg',
     tag: 'NORMAL',
-    source: 'CCTV continuous traffic flow (frames 801–920), Kaggle NonAccident Dataset',
-    licence: 'ODbL / CC BY-SA 4.0',
+    isSequence: true,
+    naturalFps: 7,
+    source: 'CCTV sequence frames 801–920, Kaggle NonAccident Dataset',
+    licence: 'See dataset page (ODbL / CC BY-SA 4.0)',
+    snapshot: '/samples/sample_normal_01_gradcam.jpg',
+  },
+  {
+    filename: 'sample_continuous_01.mp4',
+    label: 'Continuous Highway Surveillance (Real continuous video)',
+    resultPath: '/samples/sample_continuous_01.json',
+    poster: '/samples/sample_continuous_01.jpg',
+    tag: 'NORMAL',
+    isSequence: false,
+    naturalFps: 20,
+    source: 'Real continuous CCTV surveillance footage (200 frames, 10s)',
+    licence: 'See dataset page / CC BY 4.0',
+    snapshot: '/samples/sample_continuous_01_gradcam.jpg',
   },
 ];
 
@@ -130,7 +168,10 @@ function formatTime(seconds: number): string {
 // =====================================================================
 const SECTIONS = [
   { id: 'hero', label: 'Home' },
-  { id: 'demo', label: 'Live Demo' },
+  { id: 'demo', label: 'Live Monitor' },
+  { id: 'radar', label: 'Radar Map' },
+  { id: 'incidents', label: 'Incident Feed' },
+  { id: 'clarity', label: 'Clarity Guide' },
   { id: 'how-it-works', label: 'How It Works' },
   { id: 'results', label: 'Results' },
   { id: 'model-card', label: 'Model Card' },
@@ -152,6 +193,8 @@ function HUDOverlay({
   threshold,
   isSample,
   backendSpeed,
+  incidentCount = 0,
+  isSequence = false,
 }: {
   predictions: PredictionWindow[];
   currentTime: number;
@@ -163,6 +206,8 @@ function HUDOverlay({
   threshold: number;
   isSample: boolean;
   backendSpeed?: string;
+  incidentCount?: number;
+  isSequence?: boolean;
 }) {
   const currentWindow = predictions.find(
     (p) => currentTime >= p.start_time && currentTime < p.end_time
@@ -184,7 +229,6 @@ function HUDOverlay({
   }
 
   const confidence = currentWindow ? currentWindow.confidence : 0;
-  const alertCount = predictions.filter((p) => p.confidence > threshold).length;
   const currentFrame = Math.floor(currentTime * fps);
   const speedText = isSample ? 'precomputed' : (backendSpeed || (isPlaying ? `${fps.toFixed(1)} fps` : 'precomputed'));
 
@@ -204,12 +248,18 @@ function HUDOverlay({
           </span>
         </div>
         <div>WINDOW: {currentWindowIdx !== null ? currentWindowIdx + 1 : '-'}/{predictions.length || 1}</div>
-        <div>ALERTS: {alertCount}</div>
-        <div>CONFIDENCE: {(confidence * 100).toFixed(1)}%</div>
-        <div>FRAME: {currentFrame}/{totalFrames}</div>
+        <div>INCIDENTS: <span style={{ color: incidentCount > 0 ? '#ff1744' : '#00ff41', fontWeight: 700 }}>{incidentCount}</span></div>
+        <div>MODEL SCORE: {(confidence * 100).toFixed(1)}%</div>
+        <div>FRAMES ANALYSED: {currentFrame}/{totalFrames}</div>
+        <div>VIDEO FRAME RATE: {fps.toFixed(1)} fps</div>
         <div>ANALYSIS SPEED: {speedText}</div>
+        {isSequence && (
+          <div style={{ color: '#ffb74d', fontSize: 10, marginTop: 4, fontWeight: 600 }}>
+            ℹ Image sequence from dataset, not continuous video
+          </div>
+        )}
         {sourceName && (
-          <div style={{ opacity: 0.7, fontSize: 10, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>
+          <div style={{ opacity: 0.7, fontSize: 10, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 220 }}>
             FILE: {sourceName}
           </div>
         )}
@@ -408,6 +458,26 @@ export default function App() {
   // --- Active nav ---
   const [activeSection, setActiveSection] = useState('hero');
 
+  // --- Cameras and Registry ---
+  const [cameras, setCameras] = useState<CameraInfo[]>([]);
+  const [selectedCameraId, setSelectedCameraId] = useState<string>('cam-01');
+  const [uploadLocationLabel, setUploadLocationLabel] = useState<string>('');
+
+  // --- Incidents & Operations ---
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
+
+  // --- Inference Engine ---
+  const [inferenceEngine, setInferenceEngine] = useState<'server' | 'browser'>('server');
+  const [browserProgress, setBrowserProgress] = useState<{ pct: number; stage: string } | null>(null);
+  const [engineComparison, setEngineComparison] = useState<{
+    browserScore: number;
+    serverScore: number;
+    maxDiff: number;
+    parityConfirmed: boolean;
+  } | null>(null);
+  const [isComparing, setIsComparing] = useState(false);
+
   // Compute threshold-adjusted predictions
   const thresholdAnalysis = predictResult
     ? evaluatePredictionsAtThreshold(predictResult.predictions, threshold)
@@ -422,14 +492,43 @@ export default function App() {
   );
   const isCurrentAlert = currentWindow ? currentWindow.confidence > threshold : false;
 
+  const activeClip = SAMPLE_CLIPS.find((c) => c.filename === activeSample);
+
+  const currentVideoIncidents = predictResult
+    ? (predictResult.incidents && predictResult.incidents.length > 0
+        ? predictResult.incidents
+        : clusterWindowsClient(activePredictions, {
+            cameraId: selectedCameraId,
+            cameraName: cameras.find((c) => c.id === selectedCameraId)?.name,
+            locationLabel: uploadLocationLabel || (activeClip?.isSequence ? 'Location: not available in dataset (Image sequence)' : 'Location: not available in dataset'),
+            persistenceK: 1,
+            cooldownWindows: 2,
+            snapshotUrl: activeClip?.snapshot,
+          }))
+    : [];
+
   // ================================================================
-  //  0. Load Benchmark JSON
+  //  0. Load Benchmark JSON, Cameras, and Initial Incidents
   // ================================================================
   useEffect(() => {
     fetch('/benchmark.json')
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data) setBenchmarkData(data);
+      })
+      .catch(() => {});
+
+    fetchCameras()
+      .then((cams) => {
+        if (Array.isArray(cams) && cams.length > 0) setCameras(cams);
+      })
+      .catch(() => {});
+
+    fetchIncidents()
+      .then((res) => {
+        if (res && res.incidents && res.incidents.length > 0) {
+          setIncidents(res.incidents);
+        }
       })
       .catch(() => {});
   }, []);
@@ -529,6 +628,9 @@ export default function App() {
         ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
+            if (data.type === 'new_incident' && data.data) {
+              setIncidents((prev) => [data.data, ...prev.filter((i) => i.id !== data.data.id)]);
+            }
             if (data.type === 'accident_detected') {
               const detectionTime = new Date(data.timestamp).getTime();
               const latencyMs = Math.max(0, Date.now() - detectionTime);
@@ -590,7 +692,34 @@ export default function App() {
   }, [videoSrc]);
 
   // ================================================================
-  //  4. Upload handler (using safe apiClient)
+  //  4. Incident status updater
+  // ================================================================
+  const handleUpdateIncidentStatus = async (
+    id: string,
+    status: 'confirmed' | 'false_alarm',
+    note?: string
+  ) => {
+    setIncidents((prev) =>
+      prev.map((i) =>
+        i.id === id ? { ...i, status, operator_note: note !== undefined ? note : i.operator_note } : i
+      )
+    );
+    if (selectedIncident && selectedIncident.id === id) {
+      setSelectedIncident((prev) =>
+        prev ? { ...prev, status, operator_note: note !== undefined ? note : prev.operator_note } : null
+      );
+    }
+    if (serverState === 'online') {
+      try {
+        await patchIncidentStatus(id, status, note);
+      } catch (err) {
+        console.warn('Failed to sync incident status with server', err);
+      }
+    }
+  };
+
+  // ================================================================
+  //  5. Upload handler (Server vs Browser WASM)
   // ================================================================
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -604,20 +733,62 @@ export default function App() {
     setIsUploading(true);
     setUploadError(null);
     setPredictResult(null);
+    setEngineComparison(null);
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 1.0;
+    }
+
+    const locLabel = uploadLocationLabel.trim() || 'Location: not available in dataset';
+    const selectedCam = cameras.find((c) => c.id === selectedCameraId);
+    const camName = selectedCam?.name || `Camera (${selectedCameraId})`;
 
     try {
-      const data = await apiFetch<PredictResult>('/predict', {
-        method: 'POST',
-        body: formData,
-        timeoutMs: 60000,
-        retries: 1,
-        retryDelayMs: 3000,
-      });
-      setPredictResult(data);
+      if (inferenceEngine === 'browser') {
+        if (!videoRef.current) throw new Error('Video player not initialized');
+        setBrowserProgress({ pct: 10, stage: 'Initializing Browser WASM Model...' });
+        const browserRes = await runBrowserInferenceOnVideo(videoRef.current, (pct, stage) => {
+          setBrowserProgress({ pct, stage });
+        });
+        setBrowserProgress(null);
+
+        const resData: PredictResult = {
+          status: 'success',
+          message: browserRes.message,
+          predictions: browserRes.predictions,
+          inference_time_ms: browserRes.inference_time_ms,
+          frames_processed: browserRes.frames_processed,
+          fps: browserRes.fps,
+          total_frames: browserRes.total_frames,
+        };
+        setPredictResult(resData);
+
+        const clustered = clusterWindowsClient(browserRes.predictions, {
+          cameraId: selectedCameraId,
+          cameraName: camName,
+          locationLabel: locLabel,
+          persistenceK: 1,
+          cooldownWindows: 2,
+        });
+        setIncidents((prev) => [...clustered, ...prev]);
+      } else {
+        const data = await predictVideoWithMeta(selectedFile, {
+          cameraId: selectedCameraId,
+          cameraName: camName,
+          locationLabel: locLabel,
+          persistenceK: 1,
+          cooldownWindows: 2,
+        });
+        setPredictResult(data);
+        if (data.incidents && data.incidents.length > 0) {
+          setIncidents((prev) => [
+            ...data.incidents,
+            ...prev.filter((i) => !data.incidents.some((c: Incident) => c.id === i.id)),
+          ]);
+        }
+      }
     } catch (err: unknown) {
+      setBrowserProgress(null);
       if (err instanceof ApiError) {
         setUploadError(err.friendlyMessage);
       } else if (err instanceof Error) {
@@ -631,19 +802,78 @@ export default function App() {
   };
 
   // ================================================================
-  //  5. Load sample clip
+  //  6. Compare Inference Engines (Parity Verification)
+  // ================================================================
+  const handleCompareEngines = async () => {
+    if (!videoRef.current || !selectedFile) return;
+    setIsComparing(true);
+    setUploadError(null);
+    try {
+      setBrowserProgress({ pct: 15, stage: 'Running Browser WASM inference...' });
+      const browserRes = await runBrowserInferenceOnVideo(videoRef.current);
+
+      setBrowserProgress({ pct: 60, stage: 'Calling Server Cloud API...' });
+      const serverRes = await predictVideoWithMeta(selectedFile, {
+        cameraId: selectedCameraId,
+        locationLabel: uploadLocationLabel || 'Location: not available in dataset',
+      });
+      setBrowserProgress(null);
+
+      const bConfs = browserRes.predictions.map((p) => p.confidence);
+      const sConfs = serverRes.predictions.map((p: PredictionWindow) => p.confidence);
+      const minLen = Math.min(bConfs.length, sConfs.length);
+      let maxDiff = 0;
+      for (let i = 0; i < minLen; i++) {
+        const diff = Math.abs(bConfs[i] - sConfs[i]);
+        if (diff > maxDiff) maxDiff = diff;
+      }
+      const bPeak = bConfs.length ? Math.max(...bConfs) : 0;
+      const sPeak = sConfs.length ? Math.max(...sConfs) : 0;
+
+      setEngineComparison({
+        browserScore: bPeak,
+        serverScore: sPeak,
+        maxDiff,
+        parityConfirmed: maxDiff <= 0.05,
+      });
+    } catch (e: unknown) {
+      setBrowserProgress(null);
+      setUploadError(e instanceof Error ? e.message : 'Engine comparison failed');
+    } finally {
+      setIsComparing(false);
+    }
+  };
+
+  // ================================================================
+  //  7. Load sample clip
   // ================================================================
   const loadSampleClip = async (clip: SampleClip) => {
     setActiveSample(clip.filename);
     setUploadError(null);
     setSelectedFile(null);
     setIsUploading(false);
+    setEngineComparison(null);
 
     try {
       const res = await fetch(clip.resultPath);
       if (!res.ok) throw new Error(`Could not load ${clip.resultPath}`);
       const data: PredictResult = await res.json();
       setPredictResult(data);
+
+      const clipIncidents = clusterWindowsClient(data.predictions, {
+        cameraId: clip.tag === 'ACCIDENT' ? 'cam-01' : 'cam-03',
+        cameraName: clip.tag === 'ACCIDENT' ? 'Camera 01 - Highway Sector 4' : 'Camera 03 - Northbound Expressway',
+        locationLabel: clip.isSequence
+          ? 'Location: not available in dataset (Image sequence from dataset, not continuous video)'
+          : 'Location: not available in dataset (Continuous CCTV surveillance video)',
+        persistenceK: 1,
+        cooldownWindows: 2,
+        snapshotUrl: clip.snapshot,
+      });
+      setIncidents((prev) => [
+        ...clipIncidents,
+        ...prev.filter((i) => !clipIncidents.some((c) => c.id === i.id)),
+      ]);
     } catch (err: unknown) {
       setUploadError(err instanceof Error ? err.message : 'Failed to load sample');
       setPredictResult(null);
@@ -655,6 +885,10 @@ export default function App() {
     setVideoError(null);
     setCurrentTime(0);
     setHasStarted(false);
+
+    if (videoRef.current) {
+      videoRef.current.playbackRate = clip.isSequence ? 0.35 : 1.0;
+    }
   };
 
   // ================================================================
@@ -880,6 +1114,8 @@ export default function App() {
                         threshold={threshold}
                         isSample={activeSample !== null}
                         backendSpeed={predictResult.inference_time_ms ? `${predictResult.inference_time_ms.toFixed(0)}ms` : undefined}
+                        incidentCount={currentVideoIncidents.length}
+                        isSequence={activeClip?.isSequence ?? false}
                       />
                     )}
                   </>
@@ -942,6 +1178,59 @@ export default function App() {
                 )}
               </div>
 
+              {/* Camera selection & location label */}
+              <div className="upload-config-box">
+                <div className="config-grid">
+                  <div className="config-item">
+                    <label htmlFor="cam-id-select" className="config-label">SURVEILLANCE CAMERA</label>
+                    <select
+                      id="cam-id-select"
+                      className="config-select"
+                      value={selectedCameraId}
+                      onChange={(e) => setSelectedCameraId(e.target.value)}
+                    >
+                      {cameras.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name} ({c.id})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="config-item">
+                    <label htmlFor="loc-label-input" className="config-label">LOCATION LABEL (OPTIONAL)</label>
+                    <input
+                      id="loc-label-input"
+                      type="text"
+                      className="config-input"
+                      placeholder="Location: not available in dataset"
+                      value={uploadLocationLabel}
+                      onChange={(e) => setUploadLocationLabel(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* Engine Selector */}
+                <div className="engine-selector-row">
+                  <span className="engine-label">INFERENCE ENGINE:</span>
+                  <div className="engine-toggle-group">
+                    <button
+                      type="button"
+                      className={`engine-toggle-btn ${inferenceEngine === 'server' ? 'active' : ''}`}
+                      onClick={() => setInferenceEngine('server')}
+                    >
+                      ☁️ Server API (Cloud)
+                    </button>
+                    <button
+                      type="button"
+                      className={`engine-toggle-btn ${inferenceEngine === 'browser' ? 'active' : ''}`}
+                      onClick={() => setInferenceEngine('browser')}
+                    >
+                      ⚡ Browser WASM (Local)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               {/* Upload area */}
               <div className="upload-area">
                 <label
@@ -959,7 +1248,7 @@ export default function App() {
                 </label>
                 <button
                   className="btn btn-primary"
-                  disabled={!selectedFile || isUploading || serverState !== 'online'}
+                  disabled={!selectedFile || isUploading || (inferenceEngine === 'server' && serverState !== 'online')}
                   onClick={handleUpload as unknown as React.MouseEventHandler}
                   style={{ flexShrink: 0 }}
                 >
@@ -969,10 +1258,49 @@ export default function App() {
                       ANALYZING...
                     </>
                   ) : (
-                    'UPLOAD & DETECT'
+                    inferenceEngine === 'browser' ? 'RUN BROWSER WASM' : 'UPLOAD & DETECT'
                   )}
                 </button>
+                {selectedFile && serverState === 'online' && (
+                  <button
+                    type="button"
+                    className="btn btn-outline"
+                    disabled={isComparing || isUploading}
+                    onClick={handleCompareEngines}
+                    title="Run both Browser WASM and Server API and verify numerical output parity"
+                    style={{ fontSize: 11, padding: '8px 12px' }}
+                  >
+                    {isComparing ? 'Comparing...' : '⚖️ Compare Parity'}
+                  </button>
+                )}
               </div>
+
+              {/* Browser Progress Bar */}
+              {browserProgress && (
+                <div className="browser-progress-box">
+                  <div className="progress-info">
+                    <span>{browserProgress.stage}</span>
+                    <span>{browserProgress.pct}%</span>
+                  </div>
+                  <div className="progress-track">
+                    <div className="progress-fill" style={{ width: `${browserProgress.pct}%` }} />
+                  </div>
+                </div>
+              )}
+
+              {/* Parity comparison result */}
+              {engineComparison && (
+                <div className={`parity-box ${engineComparison.parityConfirmed ? 'passed' : 'diverged'}`}>
+                  <div className="parity-status">
+                    {engineComparison.parityConfirmed ? '✓ PARITY VERIFIED (Browser WASM vs Server Cloud API)' : '⚠ PARITY DIVERGENCE'}
+                  </div>
+                  <div className="parity-metrics">
+                    <span>Server Peak: <b>{(engineComparison.serverScore * 100).toFixed(2)}%</b></span>
+                    <span>Browser Peak: <b>{(engineComparison.browserScore * 100).toFixed(2)}%</b></span>
+                    <span>Max Abs Difference: <b>{engineComparison.maxDiff.toFixed(5)}</b> (&le; 0.05 tolerance)</span>
+                  </div>
+                </div>
+              )}
 
               {/* Error */}
               {uploadError && <div className="error-box">{uploadError}</div>}
@@ -1119,6 +1447,71 @@ export default function App() {
               )}
             </div>
           </div>
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══════════════════════════════════════════════════════════
+           SECTION: RADAR & SURVEILLANCE MAP
+           ═══════════════════════════════════════════════════════════ */}
+      <section id="radar" className="section">
+        <div className="section-inner">
+          <div className="section-label">Geospatial Grid</div>
+          <h2 className="section-title">Surveillance Radar & Camera Topology</h2>
+          <p className="section-subtitle">
+            Live geographic topology of monitored traffic nodes. Markers denote simulated demo cameras
+            and spatial coordinates of detected incidents.
+          </p>
+
+          <MapPanel
+            cameras={cameras}
+            incidents={incidents}
+            selectedCameraId={selectedCameraId}
+            onSelectCamera={(id) => setSelectedCameraId(id)}
+            onSelectIncident={(inc) => setSelectedIncident(inc)}
+          />
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══════════════════════════════════════════════════════════
+           SECTION: ACTIVE INCIDENTS FEED & AUDIT DRAWER
+           ═══════════════════════════════════════════════════════════ */}
+      <section id="incidents" className="section">
+        <div className="section-inner">
+          <div className="section-label">Incident Management</div>
+          <h2 className="section-title">Active Incidents & Dispatch Feed</h2>
+          <p className="section-subtitle">
+            Clustered anomaly feed merging contiguous high-confidence windows with configurable persistence
+            and cooldown. Operators can verify, flag false alarms, or export logs to CSV and JSON.
+          </p>
+
+          <IncidentFeed
+            incidents={incidents}
+            onUpdateIncidentStatus={handleUpdateIncidentStatus}
+            selectedIncident={selectedIncident}
+            onSelectIncident={setSelectedIncident}
+          />
+        </div>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* ═══════════════════════════════════════════════════════════
+           SECTION: CLARITY & ERROR AUDIT
+           ═══════════════════════════════════════════════════════════ */}
+      <section id="clarity" className="section">
+        <div className="section-inner">
+          <div className="section-label">Scientific Rigor & Error Analysis</div>
+          <h2 className="section-title">Telemetry Guide & Failure Modes</h2>
+          <p className="section-subtitle">
+            Transparent documentation of model scores, verified outcomes across all sample clips,
+            and honest empirical edge-case failure modes on real held-out CCTV footage.
+          </p>
+
+          <ClaritySections />
         </div>
       </section>
 

@@ -23,12 +23,18 @@ import cv2
 import onnxruntime as ort
 from fastapi import (
     FastAPI, WebSocket, WebSocketDisconnect, HTTPException,
-    UploadFile, File, Query, Request
+    UploadFile, File, Form, Query, Request
 )
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+
+from backend.app.incidents import (
+    Incident, IncidentPatchRequest, IncidentListResponse,
+    cluster_windows_into_incidents, send_discord_notification,
+    IN_MEMORY_INCIDENTS
+)
 
 # Load environment variables
 load_dotenv()
@@ -111,6 +117,7 @@ is_model_loaded = False
 mongo_client = None
 db = None
 detection_collection = None
+incidents_collection = None
 is_mongo_connected = False
 
 # Concurrency guard – only 1 inference at a time
@@ -212,6 +219,7 @@ class PredictResponse(BaseModel):
     status: str
     message: str
     predictions: List[PredictionWindow]
+    incidents: List[Incident] = []
     inference_time_ms: float
     frames_processed: int
     fps: float = 30.0
@@ -227,7 +235,7 @@ class PredictResponse(BaseModel):
 async def lifespan(app: FastAPI):
     """Startup and shutdown logic."""
     global model_session, model_input_name, model_output_name, is_model_loaded
-    global mongo_client, db, detection_collection, is_mongo_connected
+    global mongo_client, db, detection_collection, incidents_collection, is_mongo_connected
 
     logger.info("Starting Road Accident Detection System...")
     logger.info("DEMO_MODE=%s", DEMO_MODE)
@@ -276,6 +284,7 @@ async def lifespan(app: FastAPI):
             await mongo_client.admin.command("ping")
             db = mongo_client[MONGO_DB_NAME]
             detection_collection = db.detections
+            incidents_collection = db.incidents
             is_mongo_connected = True
             logger.info("Connected to MongoDB (%s)", MONGO_DB_NAME)
 
@@ -288,9 +297,18 @@ async def lifespan(app: FastAPI):
             except Exception:
                 logger.warning("TTL index creation skipped (may already exist)")
 
+            try:
+                await incidents_collection.create_index(
+                    "created_at", expireAfterSeconds=30 * 24 * 3600
+                )
+                logger.info("TTL index on incidents.created_at (30 days) ensured")
+            except Exception:
+                pass
+
             # Create regular index for sorting
             try:
                 await detection_collection.create_index([("created_at", -1)])
+                await incidents_collection.create_index([("created_at", -1)])
             except Exception:
                 pass
 
@@ -331,7 +349,7 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS,
     allow_origin_regex=CORS_ORIGIN_REGEX,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -555,9 +573,16 @@ async def ping():
 
 
 @app.post("/predict", response_model=PredictResponse)
-async def predict(file: UploadFile = File(...)):
+async def predict(
+    file: UploadFile = File(...),
+    camera_id: str = Form("cam-01"),
+    camera_name: Optional[str] = Form(None),
+    location_label: Optional[str] = Form("Location: not available in dataset"),
+    persistence_k: int = Form(1),
+    cooldown_windows: int = Form(2),
+):
     """
-    Upload a short video clip (≤10 MB, ≤15 s) and get accident predictions.
+    Upload a short video clip (≤10 MB, ≤15 s) and get accident predictions + clustered incidents.
     Only 1 inference runs at a time; returns 503 if busy.
     """
     global _inference_busy
@@ -570,9 +595,30 @@ async def predict(file: UploadFile = File(...)):
             f"Unsupported file type '{ct}'. Allowed: {', '.join(sorted(ALLOWED_VIDEO_TYPES))}"
         )
 
+    resolved_cam_name = camera_name
+    if not resolved_cam_name:
+        cameras_map = {
+            "cam-01": "Camera 01 - Highway Sector 4",
+            "cam-02": "Camera 02 - Downtown Junction",
+            "cam-03": "Camera 03 - Northbound Expressway",
+        }
+        resolved_cam_name = cameras_map.get(camera_id, f"Camera ({camera_id})")
+
+    resolved_location = location_label or "Location: not available in dataset"
+
     # Demo mode — instant response once content type is verified
     if DEMO_MODE:
-        return PredictResponse(**DEMO_RESULT)
+        demo_incidents = cluster_windows_into_incidents(
+            DEMO_RESULT["predictions"],
+            camera_id=camera_id,
+            camera_name=resolved_cam_name,
+            location_label=resolved_location,
+            persistence_k=persistence_k,
+            cooldown_windows=cooldown_windows,
+        )
+        resp_data = dict(DEMO_RESULT)
+        resp_data["incidents"] = demo_incidents
+        return PredictResponse(**resp_data)
 
     # Concurrency guard
     if _inference_busy:
@@ -600,27 +646,168 @@ async def predict(file: UploadFile = File(...)):
         raise HTTPException(500, "Inference failed — see server logs")
     finally:
         _inference_busy = False
-        # Free memory
         del contents
 
-    # Broadcast accidents via WebSocket and save to DB
+    # Cluster consecutive flagged windows into incidents
+    incidents = cluster_windows_into_incidents(
+        result.get("predictions", []),
+        camera_id=camera_id,
+        camera_name=resolved_cam_name,
+        location_label=resolved_location,
+        persistence_k=persistence_k,
+        cooldown_windows=cooldown_windows,
+    )
+    result["incidents"] = incidents
+
+    # Persist and broadcast incidents
+    for inc in incidents:
+        inc_dict = inc.model_dump()
+        IN_MEMORY_INCIDENTS.insert(0, inc_dict)
+        if is_mongo_connected and incidents_collection is not None:
+            try:
+                doc = dict(inc_dict)
+                doc["created_at"] = datetime.now(timezone.utc)
+                await incidents_collection.insert_one(doc)
+            except Exception:
+                logger.warning("Failed to save incident to MongoDB", exc_info=True)
+
+        ws_msg = {
+            "type": "new_incident",
+            "data": inc_dict
+        }
+        await manager.broadcast(json.dumps(ws_msg))
+        asyncio.create_task(send_discord_notification(inc))
+
+    # Backwards compatibility: broadcast individual window alerts
     for pred in result.get("predictions", []):
         if pred["is_accident"]:
             alert_data = {
                 "type": "accident_detected",
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "confidence": pred["confidence"],
-                "camera_id": "upload",
+                "camera_id": camera_id,
                 "message": f"Accident detected in window {pred['window_index']} "
                            f"(frames {pred['start_frame']}–{pred['end_frame']}) "
-                           f"with {pred['confidence']:.0%} confidence",
+                           f"with {pred['confidence']:.0%} model score",
                 "window_index": pred["window_index"],
             }
             await manager.broadcast(json.dumps(alert_data))
             await _save_detection(alert_data)
-            await send_discord_alert(alert_data)
 
     return PredictResponse(**result)
+
+
+@app.get("/cameras")
+async def get_cameras():
+    """Return camera registry with simulated demo camera locations."""
+    cameras_path = os.path.join(os.path.dirname(__file__), "cameras.json")
+    if os.path.exists(cameras_path):
+        with open(cameras_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+@app.get("/incidents", response_model=IncidentListResponse)
+async def get_incidents(
+    status: Optional[str] = Query(None, description="Filter: new, confirmed, false_alarm"),
+    camera_id: Optional[str] = Query(None, description="Filter by camera_id"),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+):
+    """Retrieve filtered, paginated incidents."""
+    if is_mongo_connected and incidents_collection is not None:
+        try:
+            query = {}
+            if status and status.lower() != "all":
+                query["status"] = status.lower()
+            if camera_id and camera_id.lower() != "all":
+                query["camera_id"] = camera_id
+
+            cursor = (
+                incidents_collection.find(query, {"_id": 0})
+                .sort("created_at", -1)
+                .skip((page - 1) * page_size)
+                .limit(page_size)
+            )
+            items = []
+            async for doc in cursor:
+                if "created_at" in doc and hasattr(doc["created_at"], "isoformat"):
+                    del doc["created_at"]
+                items.append(Incident(**doc))
+            total = await incidents_collection.count_documents(query)
+            return IncidentListResponse(incidents=items, total=total, page=page, page_size=page_size)
+        except Exception:
+            logger.exception("Failed to query MongoDB incidents, using memory store")
+
+    # In-memory fallback
+    filtered = list(IN_MEMORY_INCIDENTS)
+    if status and status.lower() != "all":
+        filtered = [x for x in filtered if x.get("status") == status.lower()]
+    if camera_id and camera_id.lower() != "all":
+        filtered = [x for x in filtered if x.get("camera_id") == camera_id]
+
+    total = len(filtered)
+    start = (page - 1) * page_size
+    end = start + page_size
+    page_items = [Incident(**x) for x in filtered[start:end]]
+    return IncidentListResponse(incidents=page_items, total=total, page=page, page_size=page_size)
+
+
+@app.get("/incidents/{incident_id}", response_model=Incident)
+async def get_incident(incident_id: str):
+    """Retrieve single incident details by ID."""
+    if is_mongo_connected and incidents_collection is not None:
+        try:
+            doc = await incidents_collection.find_one({"id": incident_id}, {"_id": 0})
+            if doc:
+                if "created_at" in doc:
+                    del doc["created_at"]
+                return Incident(**doc)
+        except Exception:
+            pass
+
+    for inc in IN_MEMORY_INCIDENTS:
+        if inc.get("id") == incident_id:
+            return Incident(**inc)
+
+    raise HTTPException(404, f"Incident '{incident_id}' not found")
+
+
+@app.patch("/incidents/{incident_id}", response_model=Incident)
+async def patch_incident(incident_id: str, patch_data: IncidentPatchRequest):
+    """Update operator status ('confirmed', 'false_alarm') or operator notes."""
+    updated_fields = {}
+    if patch_data.status is not None:
+        if patch_data.status not in ("new", "confirmed", "false_alarm"):
+            raise HTTPException(400, "status must be 'new', 'confirmed', or 'false_alarm'")
+        updated_fields["status"] = patch_data.status
+    if patch_data.operator_note is not None:
+        updated_fields["operator_note"] = patch_data.operator_note
+
+    target_inc = None
+    for inc in IN_MEMORY_INCIDENTS:
+        if inc.get("id") == incident_id:
+            inc.update(updated_fields)
+            target_inc = inc
+            break
+
+    if is_mongo_connected and incidents_collection is not None:
+        try:
+            await incidents_collection.update_one(
+                {"id": incident_id}, {"$set": updated_fields}
+            )
+            doc = await incidents_collection.find_one({"id": incident_id}, {"_id": 0})
+            if doc:
+                if "created_at" in doc:
+                    del doc["created_at"]
+                target_inc = doc
+        except Exception:
+            logger.warning("Failed to update incident in MongoDB", exc_info=True)
+
+    if target_inc:
+        return Incident(**target_inc)
+
+    raise HTTPException(404, f"Incident '{incident_id}' not found")
 
 
 @app.get("/history")

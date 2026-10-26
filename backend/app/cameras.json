@@ -1,0 +1,35 @@
+[
+  {
+    "id": "cam-01",
+    "name": "Camera 01 - Highway Sector 4",
+    "label": "Highway Overpass Mile 14",
+    "location_label": "Location: not available in dataset (simulated demo camera)",
+    "is_simulated": true,
+    "lat": 37.7749,
+    "lon": -122.4194,
+    "fps_nominal": 20.0,
+    "status": "active"
+  },
+  {
+    "id": "cam-02",
+    "name": "Camera 02 - Downtown Junction",
+    "label": "5th Ave & Market St Intersection",
+    "location_label": "Location: not available in dataset (simulated demo camera)",
+    "is_simulated": true,
+    "lat": 37.7833,
+    "lon": -122.4167,
+    "fps_nominal": 20.0,
+    "status": "active"
+  },
+  {
+    "id": "cam-03",
+    "name": "Camera 03 - Northbound Expressway",
+    "label": "Expressway Exit 8 Ramp",
+    "location_label": "Location: not available in dataset (simulated demo camera)",
+    "is_simulated": true,
+    "lat": 37.7650,
+    "lon": -122.4250,
+    "fps_nominal": 20.0,
+    "status": "active"
+  }
+]

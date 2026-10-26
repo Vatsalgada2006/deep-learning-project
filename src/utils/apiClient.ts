@@ -162,3 +162,65 @@ export async function apiFetch<T = any>(
 
   throw lastError;
 }
+
+export async function fetchCameras() {
+  try {
+    return await apiFetch<any[]>('/cameras', { timeoutMs: 4000 });
+  } catch {
+    // Fall back to public cameras.json
+    const res = await fetch('/cameras.json');
+    if (res.ok) return await res.json();
+    return [];
+  }
+}
+
+export async function fetchIncidents(status?: string, cameraId?: string, page = 1, pageSize = 20) {
+  const params = new URLSearchParams();
+  if (status && status !== 'all') params.append('status', status);
+  if (cameraId && cameraId !== 'all') params.append('camera_id', cameraId);
+  params.append('page', String(page));
+  params.append('page_size', String(pageSize));
+
+  return await apiFetch<{ incidents: any[]; total: number; page: number; page_size: number }>(
+    `/incidents?${params.toString()}`,
+    { timeoutMs: 5000 }
+  );
+}
+
+export async function patchIncidentStatus(
+  id: string,
+  status?: 'confirmed' | 'false_alarm',
+  operatorNote?: string
+) {
+  return await apiFetch<any>(`/incidents/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status, operator_note: operatorNote }),
+    timeoutMs: 5000,
+  });
+}
+
+export async function predictVideoWithMeta(
+  file: File,
+  meta: {
+    cameraId?: string;
+    cameraName?: string;
+    locationLabel?: string;
+    persistenceK?: number;
+    cooldownWindows?: number;
+  } = {}
+) {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (meta.cameraId) formData.append('camera_id', meta.cameraId);
+  if (meta.cameraName) formData.append('camera_name', meta.cameraName);
+  if (meta.locationLabel) formData.append('location_label', meta.locationLabel);
+  formData.append('persistence_k', String(meta.persistenceK ?? 1));
+  formData.append('cooldown_windows', String(meta.cooldownWindows ?? 2));
+
+  return await apiFetch<any>('/predict', {
+    method: 'POST',
+    body: formData,
+    timeoutMs: 30000,
+  });
+}
