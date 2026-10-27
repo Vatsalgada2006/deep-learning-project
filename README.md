@@ -152,5 +152,23 @@ For complete, zero-cost deployment instructions on **Vercel**, **Render**, and *
 
 ---
 
+## ⏱️ Optional Free Uptime Pinger (Prevent Render Cold Starts)
+
+Render free-tier instances spin down automatically after **15 minutes** of inactivity. When a visitor arrives, waking the container takes 30–50 seconds. To keep your backend continuously warm and eliminate cold starts:
+
+1. **Sign up for a free uptime monitor** (e.g., [Cron-Job.org](https://cron-job.org/), [UptimeRobot](https://uptimerobot.com/), or [Better Stack](https://betterstack.com/)).
+2. **Endpoint:** Set up a `GET` monitor pointing to:
+   ```text
+   https://<your-render-app>.onrender.com/health
+   ```
+3. **Ping Interval:** Every **5 minutes** (must be < 15 minutes to prevent sleep).
+4. **Expected Status:** `200 OK` (with JSON `{"status": "healthy"}`).
+5. **Why it works efficiently:**
+   - `/health` answers **instantly** without touching MongoDB or loading the ONNX model.
+   - Consumes negligible CPU/bandwidth and zero database queries.
+   - Keeps the container active while remaining 100% free-tier compliant.
+
+---
+
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

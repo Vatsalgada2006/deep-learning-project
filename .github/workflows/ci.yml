@@ -28,7 +28,7 @@ jobs:
 
       - name: Run pytest test suite
         run: |
-          python -m pytest tests/ -v
+          python -m pytest tests/ backend/ -v
 
   frontend-build:
     name: Frontend Build Check
@@ -50,19 +50,40 @@ jobs:
         run: npm run build
 
   docker-build:
-    name: Docker Build Validation
+    name: Docker Build & Healthcheck Verification
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: backend/Dockerfile
-          push: false
-          tags: road-accident-detection-api:test
+        run: |
+          docker build -f backend/Dockerfile -t road-accident-detection-api:test .
+
+      - name: Run container and verify /health returns 200
+        run: |
+          echo "Starting container with --memory=512m -e PORT=10000..."
+          docker run -d --name api-test --memory=512m -e PORT=10000 -p 10000:10000 road-accident-detection-api:test
+
+          echo "Waiting for /health to respond with 200 OK..."
+          timeout=30
+          counter=0
+          until curl -s -f http://localhost:10000/health; do
+            if [ $counter -ge $timeout ]; then
+              echo "Error: Container healthcheck timed out after ${timeout}s!"
+              echo "=== Container Logs ==="
+              docker logs api-test
+              docker stop api-test
+              exit 1
+            fi
+            echo "Waiting for /health (attempt $counter)..."
+            sleep 1
+            counter=$((counter + 1))
+          done
+
+          echo ""
+          echo "Healthcheck response verified successfully:"
+          curl -s http://localhost:10000/health | jq . || curl -s http://localhost:10000/health
+          echo "=== Container Logs ==="
+          docker logs api-test
+          docker stop api-test

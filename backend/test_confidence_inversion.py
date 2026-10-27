@@ -12,9 +12,14 @@ Run:  python -m pytest test_confidence_inversion.py -v
 import importlib
 import types
 import sys
+import os
 import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
+
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
 
 
 # ---------------------------------------------------------------------------
@@ -48,7 +53,10 @@ _make_stubs()
 
 # We import only the pure function we care about; the module-level lifespan
 # never runs during import.
-from app.main import run_inference_on_video, ACCIDENT_CONFIDENCE_THRESHOLD  # noqa: E402
+try:
+    from app.main import run_inference_on_video, ACCIDENT_CONFIDENCE_THRESHOLD  # noqa: E402
+except (ImportError, ModuleNotFoundError):
+    from backend.app.main import run_inference_on_video, ACCIDENT_CONFIDENCE_THRESHOLD  # noqa: E402
 
 
 class TestConfidenceInversion(unittest.TestCase):

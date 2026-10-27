@@ -1,0 +1,84 @@
+{
+  "status": "success",
+  "message": "Processed 394 frames (79 sampled).",
+  "predictions": [
+    {
+      "window_index": 0,
+      "start_frame": 0,
+      "end_frame": 50,
+      "start_time": 0.0,
+      "end_time": 1.6683,
+      "confidence": 0.0204,
+      "is_accident": false
+    },
+    {
+      "window_index": 1,
+      "start_frame": 50,
+      "end_frame": 100,
+      "start_time": 1.6683,
+      "end_time": 3.3367,
+      "confidence": 0.3451,
+      "is_accident": false
+    },
+    {
+      "window_index": 2,
+      "start_frame": 100,
+      "end_frame": 150,
+      "start_time": 3.3367,
+      "end_time": 5.005,
+      "confidence": 0.169,
+      "is_accident": false
+    },
+    {
+      "window_index": 3,
+      "start_frame": 150,
+      "end_frame": 200,
+      "start_time": 5.005,
+      "end_time": 6.6733,
+      "confidence": 0.0173,
+      "is_accident": false
+    },
+    {
+      "window_index": 4,
+      "start_frame": 200,
+      "end_frame": 250,
+      "start_time": 6.6733,
+      "end_time": 8.3417,
+      "confidence": 0.0231,
+      "is_accident": false
+    },
+    {
+      "window_index": 5,
+      "start_frame": 250,
+      "end_frame": 300,
+      "start_time": 8.3417,
+      "end_time": 10.01,
+      "confidence": 0.0943,
+      "is_accident": false
+    },
+    {
+      "window_index": 6,
+      "start_frame": 300,
+      "end_frame": 350,
+      "start_time": 10.01,
+      "end_time": 11.6783,
+      "confidence": 0.2933,
+      "is_accident": false
+    },
+    {
+      "window_index": 7,
+      "start_frame": 350,
+      "end_frame": 394,
+      "start_time": 11.6783,
+      "end_time": 13.1465,
+      "confidence": 0.0689,
+      "is_accident": false
+    }
+  ],
+  "inference_time_ms": 312.29,
+  "frames_processed": 79,
+  "fps": 29.97,
+  "total_frames": 394,
+  "peak_confidence": 0.3451,
+  "has_accident": false
+}

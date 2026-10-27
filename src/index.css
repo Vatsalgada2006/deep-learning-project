@@ -1749,9 +1749,202 @@ body {
 }
 
 .leaflet-map-container {
-  height: 420px;
+  height: clamp(340px, 45vh, 520px);
+  min-height: 320px;
   width: 100%;
   background: #0d1117;
+  position: relative;
+}
+
+.map-tile-fallback-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: rgba(13, 17, 23, 0.88);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: auto;
+}
+
+.fallback-card {
+  background: #161b22;
+  border: 1px solid rgba(255, 183, 77, 0.4);
+  border-radius: 8px;
+  padding: 18px;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+.fallback-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.fallback-card h4 {
+  font-size: 14px;
+  color: #ffb74d;
+  margin-bottom: 6px;
+}
+
+.fallback-card p {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* Leaflet Custom Popups */
+.map-popup-card {
+  font-family: var(--font-sans);
+  color: #111;
+  padding: 4px;
+}
+
+.map-popup-card .popup-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #0d1117;
+  margin-bottom: 2px;
+}
+
+.map-popup-card .popup-sub {
+  font-size: 11px;
+  color: #4a5568;
+  margin-bottom: 4px;
+}
+
+.popup-tag-simulated {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  color: #d97706;
+  background: #fef3c7;
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+.map-popup-card.incident-popup {
+  min-width: 230px;
+}
+
+.popup-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 4px;
+}
+
+.popup-incident-id {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  color: #e53e3e;
+}
+
+.status-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.badge-confirmed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge-false {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.badge-new {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.popup-camera-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 4px 0;
+}
+
+.popup-stat-grid {
+  display: flex;
+  justify-content: space-between;
+  background: #f8fafc;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin: 6px 0;
+}
+
+.popup-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-stat-item .stat-lbl {
+  font-size: 9px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.popup-stat-item .stat-val {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.popup-stat-item .score-highlight {
+  color: #dc2626;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.popup-btn {
+  flex: 1;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.popup-btn:hover {
+  opacity: 0.85;
+}
+
+.popup-view-btn {
+  background: #0284c7;
+  color: #fff;
+}
+
+.popup-confirm-btn {
+  background: #dc2626;
+  color: #fff;
+}
+
+.popup-false-alarm-btn {
+  background: #475569;
+  color: #fff;
 }
 
 .cam-div-icon {
@@ -2477,4 +2670,59 @@ body {
   color: var(--text-dim);
   line-height: 1.4;
   margin-top: 4px;
+}
+
+/* ============================================================
+   RESPONSIVE ENHANCEMENTS FOR MOBILE & 360px VIEWPORT
+   ============================================================ */
+@media (max-width: 480px) {
+  .map-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .leaflet-map-container {
+    height: 320px;
+  }
+  .popup-actions {
+    flex-wrap: wrap;
+  }
+  .popup-btn {
+    min-width: 45%;
+  }
+  .nav-status {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .section-inner {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .leaflet-map-container {
+    height: 280px;
+    min-height: 260px;
+  }
+  .map-disclaimer {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+  .map-title {
+    font-size: 11px;
+  }
+  .map-popup-card.incident-popup {
+    min-width: 190px;
+  }
+  .popup-btn {
+    font-size: 9px;
+    padding: 3px 4px;
+  }
+  .upload-area {
+    padding: 10px;
+  }
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }

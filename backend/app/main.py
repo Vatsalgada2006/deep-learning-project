@@ -30,11 +30,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-from backend.app.incidents import (
-    Incident, IncidentPatchRequest, IncidentListResponse,
-    cluster_windows_into_incidents, send_discord_notification,
-    IN_MEMORY_INCIDENTS
-)
+try:
+    from .incidents import (
+        Incident, IncidentPatchRequest, IncidentListResponse,
+        cluster_windows_into_incidents, send_discord_notification,
+        IN_MEMORY_INCIDENTS
+    )
+except (ImportError, ValueError):
+    from app.incidents import (
+        Incident, IncidentPatchRequest, IncidentListResponse,
+        cluster_windows_into_incidents, send_discord_notification,
+        IN_MEMORY_INCIDENTS
+    )
 
 # Load environment variables
 load_dotenv()
@@ -68,12 +75,20 @@ MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "accident_detection")
 # Discord webhook (optional)
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL", "")
 
-# CORS
+# CORS: Explicitly allow production Vercel frontend, plus local development hosts.
+# Configured via ALLOWED_ORIGINS and CORS_ORIGIN_REGEX.
+DEFAULT_ALLOWED_ORIGINS = (
+    "https://deep-learning-project-liard.vercel.app,"
+    "http://localhost:5173,"
+    "http://localhost:3000"
+)
 ALLOWED_ORIGINS = [
     o.strip()
-    for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000").split(",")
+    for o in os.getenv("ALLOWED_ORIGINS", DEFAULT_ALLOWED_ORIGINS).split(",")
     if o.strip()
 ]
+if "https://deep-learning-project-liard.vercel.app" not in ALLOWED_ORIGINS:
+    ALLOWED_ORIGINS.append("https://deep-learning-project-liard.vercel.app")
 
 # Demo mode – returns precomputed result, no model/DB needed
 DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() in ("1", "true", "yes")
@@ -83,8 +98,8 @@ MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))  # 
 MAX_VIDEO_DURATION_S = int(os.getenv("MAX_VIDEO_DURATION_S", "15"))
 ALLOWED_VIDEO_TYPES = {"video/mp4", "video/mpeg", "video/x-msvideo", "video/quicktime", "video/webm"}
 
-# Frame sampling – process every Nth frame to save CPU
-FRAME_SAMPLE_INTERVAL = int(os.getenv("FRAME_SAMPLE_INTERVAL", "5"))
+# Frame sampling – sample every 2nd frame (15 fps) to capture fast crash transitions
+FRAME_SAMPLE_INTERVAL = int(os.getenv("FRAME_SAMPLE_INTERVAL", "2"))
 # Resize frames early to this width for processing
 FRAME_RESIZE_WIDTH = int(os.getenv("FRAME_RESIZE_WIDTH", "320"))
 
@@ -227,61 +242,86 @@ class PredictResponse(BaseModel):
     peak_memory_mb: Optional[float] = None
 
 
+def load_model_if_needed() -> Optional[ort.InferenceSession]:
+    """Lazily load ONNX model on first inference request, logging load duration and peak RSS."""
+    global model_session, model_input_name, model_output_name, is_model_loaded, MODEL_CHECKSUM
+    if model_session is not None:
+        is_model_loaded = True
+        return model_session
+
+    if DEMO_MODE:
+        logger.info("DEMO_MODE active — skipping model load")
+        return None
+
+    resolved_path = MODEL_PATH
+    if not os.path.exists(resolved_path):
+        candidates = [
+            os.path.join(os.path.dirname(__file__), "..", "model.onnx"),
+            os.path.join(os.path.dirname(__file__), "model.onnx"),
+            os.path.join("backend", "model.onnx"),
+            "model.onnx",
+        ]
+        for c in candidates:
+            if os.path.exists(c):
+                resolved_path = os.path.abspath(c)
+                break
+
+    t_start = time.perf_counter()
+    logger.info("Lazily loading ONNX model from: %s (cwd=%s)", resolved_path, os.getcwd())
+    if not os.path.exists(resolved_path):
+        logger.error("Model file not found at %s — inference will be unavailable", resolved_path)
+        raise RuntimeError(f"Model file not found at {resolved_path}")
+
+    sess_options = ort.SessionOptions()
+    sess_options.intra_op_num_threads = 1
+    sess_options.inter_op_num_threads = 1
+    sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+    model_session = ort.InferenceSession(
+        resolved_path, sess_options=sess_options,
+        providers=["CPUExecutionProvider"]
+    )
+    model_input_name = model_session.get_inputs()[0].name
+    model_output_name = model_session.get_outputs()[0].name
+    is_model_loaded = True
+    try:
+        with open(resolved_path, "rb") as mf:
+            MODEL_CHECKSUM = hashlib.sha256(mf.read()).hexdigest()
+    except Exception:
+        pass
+
+    load_ms = (time.perf_counter() - t_start) * 1000
+    peak_rss = _get_rss_mb()
+    logger.info(
+        "ONNX model lazily loaded in %.1f ms | Input: %s, Output: %s, sha256: %s | Peak RSS: %.1f MB",
+        load_ms, model_input_name, model_output_name, MODEL_CHECKSUM, peak_rss
+    )
+    return model_session
+
+
 # ---------------------------------------------------------------------------
 # Lifespan (startup / shutdown)
 # ---------------------------------------------------------------------------
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup and shutdown logic."""
-    global model_session, model_input_name, model_output_name, is_model_loaded
+    """Startup and shutdown logic. Model is loaded lazily on demand."""
     global mongo_client, db, detection_collection, incidents_collection, is_mongo_connected
 
-    logger.info("Starting Road Accident Detection System...")
-    logger.info("DEMO_MODE=%s", DEMO_MODE)
+    t_startup = time.perf_counter()
+    logger.info("Starting Road Accident Detection System (lazy model loading enabled)...")
+    logger.info("DEMO_MODE=%s, PORT=%d, HOST=%s", DEMO_MODE, PORT, HOST)
 
-    # ---- Load ONNX model ----
-    if not DEMO_MODE:
-        try:
-            logger.info("Looking for model at: %s (cwd=%s)", MODEL_PATH, os.getcwd())
-            if os.path.exists(MODEL_PATH):
-                sess_options = ort.SessionOptions()
-                sess_options.intra_op_num_threads = 1
-                sess_options.inter_op_num_threads = 1
-                sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
-                model_session = ort.InferenceSession(
-                    MODEL_PATH, sess_options=sess_options,
-                    providers=["CPUExecutionProvider"]
-                )
-                model_input_name = model_session.get_inputs()[0].name
-                model_output_name = model_session.get_outputs()[0].name
-                is_model_loaded = True
-                try:
-                    with open(MODEL_PATH, "rb") as mf:
-                        global MODEL_CHECKSUM
-                        MODEL_CHECKSUM = hashlib.sha256(mf.read()).hexdigest()
-                except Exception:
-                    pass
-                logger.info("ONNX model loaded: input=%s, output=%s, sha256=%s",
-                            model_input_name, model_output_name, MODEL_CHECKSUM)
-            else:
-                logger.error("Model file not found at %s — inference will be unavailable", MODEL_PATH)
-        except Exception:
-            logger.exception("Failed to load ONNX model")
-    else:
-        logger.info("DEMO_MODE active — skipping model load")
-
-    # ---- Connect to MongoDB ----
+    # ---- Connect to MongoDB (non-blocking for fast health check) ----
     if MONGO_URI:
         try:
             from motor.motor_asyncio import AsyncIOMotorClient
             mongo_client = AsyncIOMotorClient(
                 MONGO_URI,
-                serverSelectionTimeoutMS=5000,
-                connectTimeoutMS=5000,
+                serverSelectionTimeoutMS=2000,
+                connectTimeoutMS=2000,
             )
-            # Test the connection
-            await mongo_client.admin.command("ping")
+            # Test connection with short timeout so startup never hangs
+            await asyncio.wait_for(mongo_client.admin.command("ping"), timeout=2.0)
             db = mongo_client[MONGO_DB_NAME]
             detection_collection = db.detections
             incidents_collection = db.incidents
@@ -293,19 +333,16 @@ async def lifespan(app: FastAPI):
                 await detection_collection.create_index(
                     "created_at", expireAfterSeconds=30 * 24 * 3600
                 )
-                logger.info("TTL index on created_at (30 days) ensured")
             except Exception:
-                logger.warning("TTL index creation skipped (may already exist)")
+                pass
 
             try:
                 await incidents_collection.create_index(
                     "created_at", expireAfterSeconds=30 * 24 * 3600
                 )
-                logger.info("TTL index on incidents.created_at (30 days) ensured")
             except Exception:
                 pass
 
-            # Create regular index for sorting
             try:
                 await detection_collection.create_index([("created_at", -1)])
                 await incidents_collection.create_index([("created_at", -1)])
@@ -313,12 +350,17 @@ async def lifespan(app: FastAPI):
                 pass
 
         except Exception:
-            logger.warning("MongoDB unavailable — detections will not be persisted", exc_info=True)
+            logger.warning("MongoDB unavailable or timed out — continuing without DB (is_mongo_connected=False)")
             is_mongo_connected = False
     else:
         logger.info("MONGO_URI not set — running without database")
 
-    logger.info("Startup complete")
+    startup_duration_ms = (time.perf_counter() - t_startup) * 1000
+    peak_rss = _get_rss_mb()
+    logger.info(
+        "Server startup complete in %.2f ms | Initial Peak RSS: %.2f MB",
+        startup_duration_ms, peak_rss
+    )
     yield
 
     # ---- Shutdown ----
@@ -441,6 +483,7 @@ def run_inference_on_video(video_bytes: bytes) -> dict:
         del sampled_frames
 
         # Sliding window inference
+        load_model_if_needed()
         predictions = []
         t0 = time.perf_counter()
         window_idx = 0
@@ -534,23 +577,14 @@ async def send_discord_alert(alert_data: dict):
 
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
-    """Health check — used by Render, uptime pingers, and frontend wake-up polling."""
-    mongo_ok = False
-    if mongo_client and is_mongo_connected:
-        try:
-            await asyncio.wait_for(
-                mongo_client.admin.command("ping"),
-                timeout=2.0,
-            )
-            mongo_ok = True
-        except Exception:
-            mongo_ok = False
-
+    """Health check — used by Render, uptime pingers, and frontend wake-up polling.
+    Answers INSTANTLY without touching MongoDB or loading the model.
+    """
     uptime = round(time.time() - SERVER_START_TIME, 1)
     return HealthResponse(
-        status="healthy" if (is_model_loaded or DEMO_MODE) else "degraded",
+        status="healthy",
         model_loaded=is_model_loaded,
-        mongodb_connected=mongo_ok,
+        mongodb_connected=is_mongo_connected,
         demo_mode=DEMO_MODE,
         timestamp=datetime.now(timezone.utc).isoformat(),
         websocket_connections=len(manager.active_connections),

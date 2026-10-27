@@ -60,7 +60,8 @@ export async function safeParseJson<T = any>(res: Response): Promise<T> {
       isWaking
         ? 'Backend container is waking up from free-tier sleep (typically takes 30-50s). Stand by...'
         : `Service returned unexpected response format (${res.status}). Server may be initializing.`,
-      isWaking
+      isWaking,
+      'non-JSON response'
     );
   }
 
@@ -148,7 +149,18 @@ export async function apiFetch<T = any>(
       }
 
       const isTypeError = err instanceof TypeError || (err.message && err.message.toLowerCase().includes('fetch'));
-      const reason = isTypeError ? 'CORS blocked or offline' : (err.message || 'connection failed');
+      let reason = 'network';
+      if (isTypeError) {
+        if (typeof navigator !== 'undefined' && !navigator.onLine) {
+          reason = 'network';
+        } else if (err.message && (err.message.toLowerCase().includes('cors') || err.message.toLowerCase().includes('origin'))) {
+          reason = 'CORS';
+        } else {
+          reason = 'network / CORS';
+        }
+      } else {
+        reason = err.message || 'network';
+      }
 
       throw new ApiError(
         0,

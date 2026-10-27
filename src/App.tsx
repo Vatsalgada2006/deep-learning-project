@@ -72,7 +72,10 @@ interface SampleClip {
   licence: string;
   isSequence: boolean;
   naturalFps: number;
-  snapshot: string;
+  snapshot?: string;
+  cameraId: string;
+  cameraName: string;
+  locationLabel: string;
 }
 
 // =====================================================================
@@ -82,52 +85,64 @@ const DEFAULT_THRESHOLD = 0.5;
 
 const SAMPLE_CLIPS: SampleClip[] = [
   {
-    filename: 'sample_accident_01.mp4',
-    label: 'Highway Collision (Image sequence from dataset, not continuous video)',
-    resultPath: '/samples/sample_accident_01.json',
-    poster: '/samples/sample_accident_01.jpg',
+    filename: 'video_project.mp4',
+    label: 'Video Project (Traffic Camera Feed)',
+    resultPath: '/samples/video_project.json',
+    poster: '/samples/video_project.jpg',
     tag: 'ACCIDENT',
-    isSequence: true,
-    naturalFps: 7,
-    source: 'CCTV sequence frames 1244–1339, Kaggle Accident Dataset',
-    licence: 'See dataset page (ODbL / CC BY-SA 4.0)',
-    snapshot: '/samples/sample_accident_01_gradcam.jpg',
+    isSequence: false,
+    naturalFps: 30,
+    source: 'To be confirmed by user',
+    licence: 'To be confirmed by user',
+    snapshot: '/samples/video_project.jpg',
+    cameraId: 'cam-mum-01',
+    cameraName: 'Camera 01 - Dadar TT Circle',
+    locationLabel: 'Location: Dadar, Mumbai (Simulated demo cameras, not real CCTV locations)',
   },
   {
-    filename: 'sample_accident_02.mp4',
-    label: 'Intersection Collision (Image sequence from dataset, not continuous video)',
-    resultPath: '/samples/sample_accident_02.json',
-    poster: '/samples/sample_accident_02.jpg',
+    filename: 'accident_crash_demo.mp4',
+    label: 'Accident Crash Demo (Highway Incident Feed)',
+    resultPath: '/samples/accident_crash_demo.json',
+    poster: '/samples/accident_crash_demo.jpg',
     tag: 'ACCIDENT',
-    isSequence: true,
-    naturalFps: 7,
-    source: 'CCTV sequence frames 1340–1439, Kaggle Accident Dataset',
-    licence: 'See dataset page (ODbL / CC BY-SA 4.0)',
-    snapshot: '/samples/sample_accident_02_gradcam.jpg',
+    isSequence: false,
+    naturalFps: 30,
+    source: 'To be confirmed by user',
+    licence: 'To be confirmed by user',
+    snapshot: '/samples/accident_crash_demo.jpg',
+    cameraId: 'cam-mum-02',
+    cameraName: 'Camera 02 - Bandra WEH Flyover',
+    locationLabel: 'Location: Bandra, Mumbai (Simulated demo cameras, not real CCTV locations)',
   },
   {
-    filename: 'sample_normal_01.mp4',
-    label: 'Normal Traffic Flow (Image sequence from dataset, not continuous video)',
-    resultPath: '/samples/sample_normal_01.json',
-    poster: '/samples/sample_normal_01.jpg',
-    tag: 'NORMAL',
-    isSequence: true,
-    naturalFps: 7,
-    source: 'CCTV sequence frames 801–920, Kaggle NonAccident Dataset',
-    licence: 'See dataset page (ODbL / CC BY-SA 4.0)',
-    snapshot: '/samples/sample_normal_01_gradcam.jpg',
-  },
-  {
-    filename: 'sample_continuous_01.mp4',
-    label: 'Continuous Highway Surveillance (Real continuous video)',
-    resultPath: '/samples/sample_continuous_01.json',
-    poster: '/samples/sample_continuous_01.jpg',
+    filename: 'car-accident-dataset-example2.mp4',
+    label: 'Car Accident Example 2 (Junction CCTV Feed)',
+    resultPath: '/samples/car-accident-dataset-example2.json',
+    poster: '/samples/car-accident-dataset-example2.jpg',
     tag: 'NORMAL',
     isSequence: false,
-    naturalFps: 20,
-    source: 'Real continuous CCTV surveillance footage (200 frames, 10s)',
-    licence: 'See dataset page / CC BY 4.0',
-    snapshot: '/samples/sample_continuous_01_gradcam.jpg',
+    naturalFps: 30,
+    source: 'To be confirmed by user',
+    licence: 'To be confirmed by user',
+    snapshot: '/samples/car-accident-dataset-example2.jpg',
+    cameraId: 'cam-mum-03',
+    cameraName: 'Camera 03 - Andheri-Kurla Road',
+    locationLabel: 'Location: Andheri, Mumbai (Simulated demo cameras, not real CCTV locations)',
+  },
+  {
+    filename: 'non_accident.mp4',
+    label: 'Non-Accident Normal Traffic (Continuous Flow)',
+    resultPath: '/samples/non_accident.json',
+    poster: '/samples/non_accident.jpg',
+    tag: 'NORMAL',
+    isSequence: false,
+    naturalFps: 30,
+    source: 'To be confirmed by user',
+    licence: 'To be confirmed by user',
+    snapshot: '/samples/non_accident.jpg',
+    cameraId: 'cam-mum-04',
+    cameraName: 'Camera 04 - Chembur Eastern Freeway',
+    locationLabel: 'Location: Chembur, Mumbai (Simulated demo cameras, not real CCTV locations)',
   },
 ];
 
@@ -407,10 +422,27 @@ export default function App() {
   // --- Server state ---
   const [serverState, setServerState] = useState<'waking' | 'online' | 'offline'>('waking');
   const [serverErrorReason, setServerErrorReason] = useState<string>('');
+  const [wakingAttempt, setWakingAttempt] = useState<number>(1);
+  const [wakingElapsed, setWakingElapsed] = useState<number>(0);
   const wakingStartRef = useRef<number>(Date.now());
+  const wakingAttemptRef = useRef<number>(1);
   const [healthInfo, setHealthInfo] = useState<ServerHealth | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
   const [alerts, setAlerts] = useState<CameraAlert[]>([]);
+
+  // Ticker for elapsed waking seconds (stops at 90s)
+  useEffect(() => {
+    if (serverState !== 'waking') return;
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - wakingStartRef.current) / 1000);
+      setWakingElapsed(elapsed);
+      if (elapsed >= 90) {
+        setServerState('offline');
+        setServerErrorReason((prev) => prev || 'timeout (no response within 90s)');
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [serverState]);
 
   // --- Benchmark data ---
   const [benchmarkData, setBenchmarkData] = useState<{
@@ -547,7 +579,7 @@ export default function App() {
       setServerErrorReason('');
       return true;
     } catch (err) {
-      let reason = 'Connection error';
+      let reason = 'network';
       if (err instanceof ApiError) {
         reason = err.errorReason || err.friendlyMessage;
       } else if (err instanceof Error) {
@@ -567,6 +599,9 @@ export default function App() {
 
   const handleRetryConnection = useCallback(() => {
     wakingStartRef.current = Date.now();
+    wakingAttemptRef.current = 1;
+    setWakingAttempt(1);
+    setWakingElapsed(0);
     setServerState('waking');
     setServerErrorReason('');
     checkHealth();
@@ -578,17 +613,26 @@ export default function App() {
     let isCancelled = false;
 
     const poll = async () => {
+      if (isCancelled) return;
+      const elapsed = (Date.now() - wakingStartRef.current) / 1000;
+      if (elapsed >= 90 && serverState === 'offline') {
+        // Stop polling after 90 seconds
+        return;
+      }
+
+      wakingAttemptRef.current += 1;
+      setWakingAttempt(wakingAttemptRef.current);
+
       const ok = await checkHealth();
       if (!isCancelled) {
         if (!ok) {
-          const elapsed = (Date.now() - wakingStartRef.current) / 1000;
-          if (elapsed >= 90) {
+          const currentElapsed = (Date.now() - wakingStartRef.current) / 1000;
+          if (currentElapsed >= 90) {
             setServerState('offline');
-            timer = setTimeout(poll, 45000);
-          } else {
-            delay = Math.min(delay * 1.5, 8000);
-            timer = setTimeout(poll, delay);
+            return;
           }
+          delay = Math.min(delay * 1.5, 6000);
+          timer = setTimeout(poll, delay);
         } else {
           timer = setTimeout(poll, 30000);
         }
@@ -600,7 +644,7 @@ export default function App() {
       isCancelled = true;
       clearTimeout(timer);
     };
-  }, [checkHealth]);
+  }, [checkHealth, serverState]);
 
   // ================================================================
   //  2. WebSocket
@@ -849,6 +893,7 @@ export default function App() {
   // ================================================================
   const loadSampleClip = async (clip: SampleClip) => {
     setActiveSample(clip.filename);
+    setSelectedCameraId(clip.cameraId);
     setUploadError(null);
     setSelectedFile(null);
     setIsUploading(false);
@@ -861,14 +906,12 @@ export default function App() {
       setPredictResult(data);
 
       const clipIncidents = clusterWindowsClient(data.predictions, {
-        cameraId: clip.tag === 'ACCIDENT' ? 'cam-01' : 'cam-03',
-        cameraName: clip.tag === 'ACCIDENT' ? 'Camera 01 - Highway Sector 4' : 'Camera 03 - Northbound Expressway',
-        locationLabel: clip.isSequence
-          ? 'Location: not available in dataset (Image sequence from dataset, not continuous video)'
-          : 'Location: not available in dataset (Continuous CCTV surveillance video)',
+        cameraId: clip.cameraId,
+        cameraName: clip.cameraName,
+        locationLabel: clip.locationLabel,
         persistenceK: 1,
         cooldownWindows: 2,
-        snapshotUrl: clip.snapshot,
+        snapshotUrl: clip.snapshot || clip.poster,
       });
       setIncidents((prev) => [
         ...clipIncidents,
@@ -958,24 +1001,29 @@ export default function App() {
           {serverState === 'waking' ? (
             <>
               <span className="status-dot waking" />
-              <span style={{ color: '#ffc107' }}>WAKING...</span>
+              <span style={{ color: '#ffc107', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
+                Waking (attempt {wakingAttempt}, {wakingElapsed}s)
+              </span>
             </>
           ) : serverState === 'offline' ? (
             <>
               <span className="status-dot offline" />
-              <span style={{ color: 'var(--text-dim)' }}>OFFLINE</span>
+              <span style={{ color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
+                Offline ({serverErrorReason || 'network'})
+              </span>
               <button
                 className="retry-btn"
                 onClick={handleRetryConnection}
                 aria-label="Retry connection"
+                title="Retry connection"
               >
-                ↻
+                ↻ Retry
               </button>
             </>
           ) : (
             <>
-              <span className={`status-dot ${wsConnected ? 'online' : 'offline'}`} />
-              <span style={{ color: wsConnected ? 'var(--neon-green)' : 'var(--neon-green)' }}>
+              <span className={`status-dot ${wsConnected ? 'online' : 'online'}`} />
+              <span style={{ color: 'var(--neon-green)', fontFamily: 'var(--font-mono)', fontSize: '11px' }}>
                 {wsConnected ? 'LIVE' : 'ONLINE'}
               </span>
             </>
@@ -993,9 +1041,9 @@ export default function App() {
             loop
             muted
             playsInline
-            poster="/samples/sample_accident_01.jpg"
+            poster="/samples/video_project.jpg"
           >
-            <source src="/samples/hero_loop.webm" type="video/webm" />
+            <source src="/samples/video_project.mp4" type="video/mp4" />
           </video>
         </div>
 
@@ -1070,11 +1118,30 @@ export default function App() {
             <div className="wakeup-banner" style={{ marginBottom: 'var(--sp-4)' }}>
               <div className="spinner" style={{ borderColor: '#ffc107', borderTopColor: '#fff' }} />
               <div>
-                <div style={{ fontWeight: 600 }}>Waking up Render free-tier instance...</div>
+                <div style={{ fontWeight: 600 }}>
+                  Waking up Render instance (attempt {wakingAttempt}, {wakingElapsed}s elapsed)
+                </div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,193,7,0.7)', marginTop: 2 }}>
-                  Cold start takes ~30–50s. You can still try sample clips instantly.
+                  Cold start takes ~30–50s (stops at 90s). All sample clips work offline below!
                 </div>
               </div>
+            </div>
+          )}
+
+          {serverState === 'offline' && (
+            <div className="wakeup-banner offline-banner" style={{ marginBottom: 'var(--sp-4)', borderColor: 'rgba(255,23,68,0.4)', background: 'rgba(255,23,68,0.08)' }}>
+              <span style={{ fontSize: '18px' }}>⚠️</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, color: '#ff5252' }}>
+                  Server Offline — Reason: {serverErrorReason || 'timeout (stopped after 90s)'}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-dim)', marginTop: 2 }}>
+                  Precomputed demo samples remain 100% interactive offline. Click Retry to re-ping the server.
+                </div>
+              </div>
+              <button className="btn btn-outline" onClick={handleRetryConnection} style={{ fontSize: '11px', padding: '6px 12px' }}>
+                ↻ Retry Connection
+              </button>
             </div>
           )}
 
@@ -1470,6 +1537,7 @@ export default function App() {
             selectedCameraId={selectedCameraId}
             onSelectCamera={(id) => setSelectedCameraId(id)}
             onSelectIncident={(inc) => setSelectedIncident(inc)}
+            onUpdateIncidentStatus={handleUpdateIncidentStatus}
           />
         </div>
       </section>

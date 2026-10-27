@@ -1,0 +1,165 @@
+{
+  "status": "success",
+  "message": "Processed 830 frames (166 sampled).",
+  "predictions": [
+    {
+      "window_index": 0,
+      "start_frame": 0,
+      "end_frame": 50,
+      "start_time": 0.0,
+      "end_time": 1.6683,
+      "confidence": 0.0172,
+      "is_accident": false
+    },
+    {
+      "window_index": 1,
+      "start_frame": 50,
+      "end_frame": 100,
+      "start_time": 1.6683,
+      "end_time": 3.3367,
+      "confidence": 0.0161,
+      "is_accident": false
+    },
+    {
+      "window_index": 2,
+      "start_frame": 100,
+      "end_frame": 150,
+      "start_time": 3.3367,
+      "end_time": 5.005,
+      "confidence": 0.0176,
+      "is_accident": false
+    },
+    {
+      "window_index": 3,
+      "start_frame": 150,
+      "end_frame": 200,
+      "start_time": 5.005,
+      "end_time": 6.6733,
+      "confidence": 0.0164,
+      "is_accident": false
+    },
+    {
+      "window_index": 4,
+      "start_frame": 200,
+      "end_frame": 250,
+      "start_time": 6.6733,
+      "end_time": 8.3417,
+      "confidence": 0.0166,
+      "is_accident": false
+    },
+    {
+      "window_index": 5,
+      "start_frame": 250,
+      "end_frame": 300,
+      "start_time": 8.3417,
+      "end_time": 10.01,
+      "confidence": 0.0163,
+      "is_accident": false
+    },
+    {
+      "window_index": 6,
+      "start_frame": 300,
+      "end_frame": 350,
+      "start_time": 10.01,
+      "end_time": 11.6783,
+      "confidence": 0.0157,
+      "is_accident": false
+    },
+    {
+      "window_index": 7,
+      "start_frame": 350,
+      "end_frame": 400,
+      "start_time": 11.6783,
+      "end_time": 13.3467,
+      "confidence": 0.0155,
+      "is_accident": false
+    },
+    {
+      "window_index": 8,
+      "start_frame": 400,
+      "end_frame": 450,
+      "start_time": 13.3467,
+      "end_time": 15.015,
+      "confidence": 0.016,
+      "is_accident": false
+    },
+    {
+      "window_index": 9,
+      "start_frame": 450,
+      "end_frame": 500,
+      "start_time": 15.015,
+      "end_time": 16.6833,
+      "confidence": 0.016,
+      "is_accident": false
+    },
+    {
+      "window_index": 10,
+      "start_frame": 500,
+      "end_frame": 550,
+      "start_time": 16.6833,
+      "end_time": 18.3517,
+      "confidence": 0.0158,
+      "is_accident": false
+    },
+    {
+      "window_index": 11,
+      "start_frame": 550,
+      "end_frame": 600,
+      "start_time": 18.3517,
+      "end_time": 20.02,
+      "confidence": 0.0159,
+      "is_accident": false
+    },
+    {
+      "window_index": 12,
+      "start_frame": 600,
+      "end_frame": 650,
+      "start_time": 20.02,
+      "end_time": 21.6883,
+      "confidence": 0.0165,
+      "is_accident": false
+    },
+    {
+      "window_index": 13,
+      "start_frame": 650,
+      "end_frame": 700,
+      "start_time": 21.6883,
+      "end_time": 23.3567,
+      "confidence": 0.0185,
+      "is_accident": false
+    },
+    {
+      "window_index": 14,
+      "start_frame": 700,
+      "end_frame": 750,
+      "start_time": 23.3567,
+      "end_time": 25.025,
+      "confidence": 0.0164,
+      "is_accident": false
+    },
+    {
+      "window_index": 15,
+      "start_frame": 750,
+      "end_frame": 800,
+      "start_time": 25.025,
+      "end_time": 26.6933,
+      "confidence": 0.0157,
+      "is_accident": false
+    },
+    {
+      "window_index": 16,
+      "start_frame": 800,
+      "end_frame": 830,
+      "start_time": 26.6933,
+      "end_time": 27.6943,
+      "confidence": 0.0157,
+      "is_accident": false
+    }
+  ],
+  "inference_time_ms": 517.2,
+  "frames_processed": 166,
+  "fps": 29.97,
+  "total_frames": 830,
+  "peak_confidence": 0.0185,
+  "has_accident": false
+}

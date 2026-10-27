@@ -6,7 +6,15 @@
 *.log
 *.mp4
 *.avi
+*.mov
+*.webm
 !public/samples/*.mp4
+!public/samples/*.mov
+!public/samples/*.webm
+!public/samples/*.jpg
+!public/samples/*.png
+!public/samples/*.json
+!demo_clips/*
 !backend/sample_video.mp4
 
 

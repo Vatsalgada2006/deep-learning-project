@@ -1,116 +1,78 @@
-# Google Colab Setup Instructions for Road Accident Detection Model Training
+# Step-by-Step Colab & Kaggle Training Guide for Continuous Video Accident Detection
 
-## Step 1: Open Google Colab
-Go to: https://colab.research.google.com
+This guide walks through training the continuous video accident detection model (Two-Stage MobileNetV2 + LSTM) on Google Colab or Kaggle GPU, and synchronizing the trained `model.onnx` and evaluation metrics back into the repository.
 
-## Step 2: Create New Notebook
-Click "New Notebook"
+---
 
-## Step 3: Mount Google Drive (Recommended for Large Dataset)
-Run this in the first cell:
-```python
-from google.colab import drive
-drive.mount('/content/drive')
-```
-Click the link, log in to your Google account, and copy the authorization code.
+## 1. Preparing the Video Dataset
+To ensure the model works on real continuous video without artificial static sequences:
+1. **Download public video data**:
+   - **UCF-Crime (`RoadAccidents` subset)**: Download via Kaggle CLI:
+     ```bash
+     kaggle datasets download -d odinsam/ucf-crime-dataset
+     unzip ucf-crime-dataset.zip
+     ```
+   - **DoTA (Detection of Traffic Anomaly)**: Download accident clips (`Collision`, `Out_of_control`) and normal background clips from the official repository (`https://github.com/yujiang/DoTA_dataset`).
+2. **Organize into folder structure**:
+   ```
+   dataset/
+     Accident/
+       video_001.mp4
+       video_002.mp4
+       ...
+     Normal/
+       normal_001.mp4
+       normal_002.mp4
+       ...
+   ```
+3. **DO NOT include demo clips**:
+   Ensure `demo_clips/` (`accident_crash_demo.mp4`, `video_project.mp4`, `car-accident-dataset-example2.mp4`, `non_accident.mp4`) are strictly excluded from training, validation, and testing.
 
-## Step 4: Upload Dataset and Script
-You have two options:
+---
 
-### Option A: Upload via Google Drive (Recommended)
-1. Upload your `datasets` folder to Google Drive (inside MyDrive)
-2. Upload `model_training\train_cnn_lstm_final.py` to Google Drive
-3. In Colab, your files will be at:
-   - Dataset: `/content/drive/MyDrive/datasets/`
-   - Script: `/content/drive/MyDrive/model_training/train_cnn_lstm_final.py`
+## 2. Running Training on Google Colab
+1. Open [Google Colab](https://colab.research.google.com).
+2. Click **File → Upload notebook** and select `model_training/Accident_Detection_Continuous_Video.ipynb`.
+3. Switch runtime to GPU: **Runtime → Change runtime type → T4 GPU (or V100/A100)**.
+4. Mount your Google Drive or upload your video dataset archive:
+   ```python
+   from google.colab import drive
+   drive.mount('/content/drive')
+   ```
+5. Run the training cells:
+   - **Video Group Split**: Partitions clips by video ID into Train (70%), Validation (15%), and Unseen Test (15%).
+   - **Two-Stage Training**:
+     - Stage 1: Frozen MobileNetV2 backbone (lr = 1e-3, early stopping on val AUC).
+     - Stage 2: Fine-tune last 25 MobileNetV2 layers (lr = 5e-6, Adam).
+   - **Validation Threshold Selection**: Chooses optimal threshold $\tau$ targeting accident recall $\ge 0.85$.
+   - **ONNX Export**: Converts Keras model to `model.onnx` and verifies numerical parity within tolerance ($10^{-4}$).
 
-### Option B: Upload Directly to Colab Session
-1. Use the file upload button in Colab's left pane
-2. Upload the entire `datasets` folder (may take time for large files)
-3. Upload `model_training\train_cnn_lstm_final.py`
+---
 
-## Step 5: Install Dependencies and Set Path
-Run this in a new cell:
-```python
-# Install required packages
-!pip install -q tensorflow numpy scikit-learn opencv-python tqdm matplotlib tf2onnx onnx
+## 3. Bringing Files Back Into the Repository
+After the training script finishes, it generates:
+- `model.onnx` (the exported ONNX model)
+- `labels.json` (`{"0": "Normal", "1": "Accident"}`)
+- `CNN_LSTM_results.json` and `Baseline_CNN_results.json`
+- Plots: `roc_curve.png`, `pr_curve.png`, `confusion_matrix.png`, `training_curves.png`
 
-# Check if GPU is available
-import tensorflow as tf
-print("GPU Available: ", tf.test.is_gpu_available())
-```
-
-## Step 6: Set Working Directory and Run Training
-Run this in a new cell (ADJUST PATHS AS NEEDED):
-
-### If using Google Drive:
-```python
-# Change to your Drive directory where you uploaded files
-%cd /content/drive/MyDrive
-
-# Run the training script
-!python model_training/train_cnn_lstm_final.py \
-    --dataset_path "/content/drive/MyDrive/datasets" \
-    --seq_length 10 \
-    --batch_size 32 \
-    --epochs 20 \
-    --output_dir "/content/drive/MyDrive/accident_model_output"
-```
-
-### If using direct Colab upload:
-```python
-# Change to content directory
-%cd /content
-
-# Run the training script
-!python model_training/train_cnn_lstm_final.py \
-    --dataset_path "/content/datasets" \
-    --seq_length 10 \
-    --batch_size 32 \
-    --epochs 20 \
-    --output_dir "/content/model_output"
-```
-
-## Step 7: Monitor Training
-You'll see output showing:
-- Dataset loading and image counts
-- Model architecture summaries
-- Training progress for both CNN and CNN-LSTM
-- Validation metrics after each epoch
-- Final evaluation results
-- ONNX conversion confirmation
-
-## Step 8: Retrieve Results
-After training completes:
-- **Best models**: `best_cnn.h5` and `best_cnn_lstm.h5`
-- **Final model**: `cnn_lstm_model.h5`
-- **ONNX model**: `model.onnx` (this is what you'll need for the backend)
-- **Results**: `*_results.json` files with metrics
-- **Plots**: Training history and confusion matrix visualizations
-
-## 📋 What to Send Me After Training
-Once training is complete, please:
-1. Download the `model.onnx` file from the output directory
-2. Share it with me (you can upload it to our project's `backend/model/` folder or similar)
-3. Optionally share the results JSON files so I can verify the metrics
-
-## 🚨 Troubleshooting Tips
-1. **Out of Memory**: Reduce `--batch_size` to 16 or 8
-2. **Slow Training**: Check that GPU is being used (look for "GPU Available: True" in Step 5 output)
-3. **Dataset Path Errors**: Double-check the path - use `%ls` to see what's in your current directory
-4. **Dependencies Not Installing**: Run the pip install cell again if needed
-
-## 📊 Expected Success Criteria
-After training, we'll verify:
-- ✅ CNN-LSTM F1-score > Baseline CNN F1-score  
-- ✅ CNN-LSTM ROC-AUC > Baseline CNN ROC-AUC
-- ✅ Both models show reasonable performance (>70% accuracy would be good)
-- ✅ ONNX exports correctly
-
-## ⏱️ Time Estimates
-- Package installation: 2-5 minutes
-- Dataset loading: 2-10 minutes (depends on size and connection)
-- Training (20 epochs): 15-40 minutes on GPU
-- Total: ~25-60 minutes
-
-**Ready to start?** Just follow the steps above and let me know when training begins or if you encounter any issues! 🚂
+### Sync Steps:
+1. Download `model.onnx` and copy it to:
+   - `backend/model.onnx`
+   - `public/model.onnx`
+2. Copy `CNN_LSTM_results.json`, `Baseline_CNN_results.json`, and `labels.json` to:
+   - `backend/accident_model_output/`
+3. Copy the evaluation plot PNGs to:
+   - `public/plots/` (or `backend/accident_model_output/`)
+4. Verify checksum and parity locally:
+   ```bash
+   python -m pytest tests/test_onnx_keras_parity.py -v
+   python -m pytest tests/test_api.py -v
+   ```
+5. Commit and push:
+   ```bash
+   git add backend/model.onnx public/model.onnx backend/accident_model_output/
+   git commit -m "Update accident detection model weights and continuous video metrics"
+   git push origin main
+   ```
+Render and Vercel will automatically build and deploy the verified model!
