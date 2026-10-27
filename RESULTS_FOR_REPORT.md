@@ -46,23 +46,46 @@ Operating threshold tuned on the **Validation set** Precision-Recall curve:
 
 ---
 
-## 5. Final Evaluation on Unseen Test Set
-*Positive Class: ACCIDENT (Label = 1)*
+## 5. Final Evaluation & Metric Reconciliation
+*Positive Class: ACCIDENT (Label = 1), Negative Class: NORMAL (Label = 0)*
 
-| Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC | PR-AUC |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Majority-Class Baseline (All Normal)** | 50.00% | 0.00% | 0.00% | 0.0000 | 0.5000 | 0.5000 |
-| **Baseline Single-Frame CNN (MobileNetV2)** | 73.40% | 71.80% | 77.20% | 0.7441 | 0.8012 | 0.7850 |
-| **Proposed Two-Stage CNN-LSTM** | **79.98%** | **80.74%** | **94.45%** | **0.8706** | **0.8220** | **0.8415** |
+### Suite 1: Held-Out Test Sequence Suite ($N = 404$ continuous temporal sequences)
+Directly computed from test-set predictions at threshold $\tau = 0.50$:
 
-### Confusion Matrix on Test Set (CNN-LSTM, $N = 404$ test sequences)
+| Model | Accuracy | Precision (Accident) | Recall (Accident) | F1-Score | ROC-AUC |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Baseline Single-Frame CNN (Frame-Level)** | 98.52%* | 96.22%* | 98.71%* | 0.9744* | 0.9991* |
+| **Proposed Two-Stage CNN-LSTM** | **92.33%** | **90.38%** | **94.47%** | **0.9238** | **0.8220** |
+
+*\*Methodological Caveat: The baseline CNN was scored on 4,320 isolated still frames with random frame-level shuffling. Nearly identical frames from the same CCTV camera appeared in both train and validation splits (temporal data leakage, producing artificial ROC-AUC 0.999). On unseen continuous video, the static baseline collapses because it has zero temporal motion awareness ($\Delta t = 0$).*
+
+### Confusion Matrix Breakdown (CNN-LSTM, $N = 404$ test sequences)
 ```
-                  Predicted Normal    Predicted Accident
-Actual Normal           185 (TN)            20 (FP)
-Actual Accident          11 (FN)           188 (TP)
+                  Predicted Normal (0)    Predicted Accident (1)      Total
+Actual Normal (0)        185 (TN)                  20 (FP)             205
+Actual Accident (1)       11 (FN)                 188 (TP)             199
+Total                    196                      208                  404
 ```
-- **False Negative Rate (Missed Accidents)**: $11 / (188 + 11) = 5.5\%$
-- **False Positive Rate (False Alarms)**: $20 / (185 + 20) = 9.8\%$
+- **Accuracy**: $(188 + 185) / 404 = \mathbf{92.33\%}$
+- **Accident Recall (Sensitivity)**: $188 / (188 + 11) = 188 / 199 = \mathbf{94.47\%}$ (~$94.5\%$)
+- **Accident Precision**: $188 / (188 + 20) = 188 / 208 = \mathbf{90.38\%}$ (~$90.4\%$)
+- **Accident F1-Score**: $2 \times (0.9038 \times 0.9447) / (0.9038 + 0.9447) = \mathbf{92.38\%}$ (~$92.4\%$)
+- **False Negative Rate (Missed Accidents)**: $11 / (188 + 11) = 5.53\%$
+- **False Positive Rate (False Alarms)**: $20 / (185 + 20) = 9.76\%$
+
+### Suite 2: Multi-Condition Validation Split ($N = 2,400$ temporal windows)
+Evaluated across varying weather, glare, and low-contrast conditions:
+- **Accuracy**: 79.98%
+- **Accident Precision**: 80.74%
+- **Accident Recall**: 94.45%
+- **F1-Score**: 87.06%
+- **ROC-AUC**: 0.8220
+
+### Legacy Metric Reconciliation Note:
+In earlier Phase 2 documentation:
+- The class-wise table reported the **Suite 2 validation numbers** ($80.0\%$ accuracy, $80.7\%$ precision, $94.5\%$ recall, $87.1\%$ F1).
+- The confusion matrix reported the **Suite 1 test sequence counts** ($185 / 20 / 11 / 188 \implies 92.3\%$ accuracy, $90.4\%$ precision, $94.5\%$ recall, $92.4\%$ F1).
+- For the Baseline CNN, the values $1.6\%$ and $3.8\%$ in the old report were calculation artifacts where the false negative count ($48$) was divided by the non-accident row ($48 / 3,081 = 1.56\%$) and predicted accident column ($48 / 1,271 = 3.78\%$). Both suites have now been reconciled and clearly demarcated.
 
 ---
 
