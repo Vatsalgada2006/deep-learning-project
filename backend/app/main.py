@@ -95,7 +95,7 @@ DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() in ("1", "true", "yes")
 
 # Upload limits
 MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))  # 10 MB
-MAX_VIDEO_DURATION_S = int(os.getenv("MAX_VIDEO_DURATION_S", "15"))
+MAX_VIDEO_DURATION_S = int(os.getenv("MAX_VIDEO_DURATION_S", "35"))
 ALLOWED_VIDEO_TYPES = {"video/mp4", "video/mpeg", "video/x-msvideo", "video/quicktime", "video/webm"}
 
 # Frame sampling – sample every 2nd frame (15 fps) to capture fast crash transitions

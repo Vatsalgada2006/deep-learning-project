@@ -1,48 +1,110 @@
 {
   "status": "success",
-  "message": "Processed 210 frames (42 sampled).",
+  "message": "Processed 105 frames in 11 windows",
   "predictions": [
     {
       "window_index": 0,
       "start_frame": 0,
-      "end_frame": 50,
+      "end_frame": 20,
       "start_time": 0.0,
-      "end_time": 1.6683,
-      "confidence": 0.0163,
+      "end_time": 0.6673,
+      "confidence": 0.016,
       "is_accident": false
     },
     {
       "window_index": 1,
-      "start_frame": 50,
-      "end_frame": 100,
-      "start_time": 1.6683,
-      "end_time": 3.3367,
-      "confidence": 0.0164,
+      "start_frame": 20,
+      "end_frame": 40,
+      "start_time": 0.6673,
+      "end_time": 1.3347,
+      "confidence": 0.0162,
       "is_accident": false
     },
     {
       "window_index": 2,
-      "start_frame": 100,
-      "end_frame": 150,
-      "start_time": 3.3367,
-      "end_time": 5.005,
-      "confidence": 0.0164,
+      "start_frame": 40,
+      "end_frame": 60,
+      "start_time": 1.3347,
+      "end_time": 2.002,
+      "confidence": 0.016,
       "is_accident": false
     },
     {
       "window_index": 3,
-      "start_frame": 150,
+      "start_frame": 60,
+      "end_frame": 80,
+      "start_time": 2.002,
+      "end_time": 2.6693,
+      "confidence": 0.0161,
+      "is_accident": false
+    },
+    {
+      "window_index": 4,
+      "start_frame": 80,
+      "end_frame": 100,
+      "start_time": 2.6693,
+      "end_time": 3.3367,
+      "confidence": 0.016,
+      "is_accident": false
+    },
+    {
+      "window_index": 5,
+      "start_frame": 100,
+      "end_frame": 120,
+      "start_time": 3.3367,
+      "end_time": 4.004,
+      "confidence": 0.0162,
+      "is_accident": false
+    },
+    {
+      "window_index": 6,
+      "start_frame": 120,
+      "end_frame": 140,
+      "start_time": 4.004,
+      "end_time": 4.6713,
+      "confidence": 0.0174,
+      "is_accident": false
+    },
+    {
+      "window_index": 7,
+      "start_frame": 140,
+      "end_frame": 160,
+      "start_time": 4.6713,
+      "end_time": 5.3387,
+      "confidence": 0.0164,
+      "is_accident": false
+    },
+    {
+      "window_index": 8,
+      "start_frame": 160,
+      "end_frame": 180,
+      "start_time": 5.3387,
+      "end_time": 6.006,
+      "confidence": 0.0161,
+      "is_accident": false
+    },
+    {
+      "window_index": 9,
+      "start_frame": 180,
       "end_frame": 200,
-      "start_time": 5.005,
+      "start_time": 6.006,
       "end_time": 6.6733,
-      "confidence": 0.0166,
+      "confidence": 0.016,
+      "is_accident": false
+    },
+    {
+      "window_index": 10,
+      "start_frame": 200,
+      "end_frame": 210,
+      "start_time": 6.6733,
+      "end_time": 7.007,
+      "confidence": 0.0159,
       "is_accident": false
     }
   ],
-  "inference_time_ms": 127.81,
-  "frames_processed": 42,
+  "inference_time_ms": 1668.53,
+  "frames_processed": 105,
   "fps": 29.97,
   "total_frames": 210,
-  "peak_confidence": 0.0166,
-  "has_accident": false
+  "peak_memory_mb": 88.8
 }

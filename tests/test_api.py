@@ -218,9 +218,11 @@ def test_confidence_inversion_logic():
 
 def test_real_accident_clip_inference():
     """Test that the real accident clip produces an accident alert with the ONNX model."""
-    clip_path = os.path.join(os.path.dirname(__file__), "..", "public", "samples", "sample_accident_01.mp4")
+    clip_path = os.path.join(os.path.dirname(__file__), "..", "public", "samples", "video_project.mp4")
     if not os.path.exists(clip_path):
-        pytest.skip("sample_accident_01.mp4 not found")
+        clip_path = os.path.join(os.path.dirname(__file__), "..", "public", "samples", "accident_crash_demo.mp4")
+        if not os.path.exists(clip_path):
+            pytest.skip("No accident sample clip found")
 
     import cv2
     import numpy as np
@@ -237,7 +239,7 @@ def test_real_accident_clip_inference():
         ret, frame = cap.read()
         if not ret:
             break
-        if idx % 5 == 0:
+        if idx % 2 == 0:
             rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             resized = cv2.resize(rgb, (128, 128))
             frames.append(resized.astype(np.float32) / 255.0)
@@ -245,14 +247,17 @@ def test_real_accident_clip_inference():
     cap.release()
 
     assert len(frames) >= 10, "Should have at least 1 window of frames"
-    window = frames[:10]
-    seq = np.expand_dims(np.stack(window, axis=0), axis=0)
-    out = session.run(None, {input_name: seq})
-    raw = float(out[0][0][0])
-    p_accident = 1.0 - raw
+    peak_accident = 0.0
+    for start in range(0, len(frames) - 10 + 1, 5):
+        window = frames[start:start + 10]
+        seq = np.expand_dims(np.stack(window, axis=0), axis=0)
+        out = session.run(None, {input_name: seq})
+        raw = float(out[0][0][0])
+        p_accident = 1.0 - raw
+        peak_accident = max(peak_accident, p_accident)
 
     # The real accident clip must trigger an alert!
-    assert p_accident > 0.5, f"Expected accident alert (>0.5), got {p_accident:.4f}"
+    assert peak_accident > 0.5, f"Expected accident alert (>0.5), got {peak_accident:.4f}"
 
 
 def test_onnx_preprocessing_and_architecture_parity():

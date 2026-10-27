@@ -125,61 +125,61 @@ export const ClaritySections: React.FC = () => {
             <tbody>
               <tr>
                 <td>
-                  <b>Highway Collision</b>
-                  <div className="tbl-sub">sample_accident_01.mp4</div>
+                  <b>Highway Multi-Lane Collision</b>
+                  <div className="tbl-sub">accident_crash_demo.mp4</div>
                 </td>
                 <td>
-                  <span className="type-pill sequence">Image sequence</span>
+                  <span className="type-pill continuous">Continuous video</span>
                 </td>
                 <td><span className="truth-pill accident">Accident</span></td>
-                <td><b>0.6891</b></td>
-                <td>0.6809</td>
-                <td><span className="status-pill flagged">Flagged</span></td>
+                <td><b>0.8724</b></td>
+                <td>0.2671</td>
+                <td><span className="status-pill flagged">Flagged (20 windows)</span></td>
                 <td><span className="outcome-pill correct">✓ True Positive</span></td>
               </tr>
 
               <tr>
                 <td>
-                  <b>Intersection Collision</b>
-                  <div className="tbl-sub">sample_accident_02.mp4</div>
+                  <b>Intersection Vehicle Crash</b>
+                  <div className="tbl-sub">video_project.mp4</div>
                 </td>
                 <td>
-                  <span className="type-pill sequence">Image sequence</span>
+                  <span className="type-pill continuous">Continuous video</span>
                 </td>
                 <td><span className="truth-pill accident">Accident</span></td>
-                <td><b>0.8536</b></td>
-                <td>0.5847</td>
-                <td><span className="status-pill flagged">Flagged</span></td>
+                <td><b>0.8977</b></td>
+                <td>0.7336</td>
+                <td><span className="status-pill flagged">Flagged (12 windows)</span></td>
                 <td><span className="outcome-pill correct">✓ True Positive</span></td>
               </tr>
 
               <tr>
                 <td>
-                  <b>Normal Traffic Flow</b>
-                  <div className="tbl-sub">sample_normal_01.mp4</div>
-                </td>
-                <td>
-                  <span className="type-pill sequence">Image sequence</span>
-                </td>
-                <td><span className="truth-pill normal">Normal</span></td>
-                <td><b>0.0194</b></td>
-                <td>0.0188</td>
-                <td><span className="status-pill clear">Clear</span></td>
-                <td><span className="outcome-pill correct">✓ True Negative</span></td>
-              </tr>
-
-              <tr>
-                <td>
-                  <b>Continuous Highway Surveillance</b>
-                  <div className="tbl-sub">sample_continuous_01.mp4</div>
+                  <b>Continuous Normal Highway Flow</b>
+                  <div className="tbl-sub">non_accident.mp4</div>
                 </td>
                 <td>
                   <span className="type-pill continuous">Continuous video</span>
                 </td>
                 <td><span className="truth-pill normal">Normal</span></td>
-                <td><b>0.0163</b></td>
-                <td>0.0158</td>
-                <td><span className="status-pill clear">Clear (39 windows)</span></td>
+                <td><b>0.0228</b></td>
+                <td>0.0173</td>
+                <td><span className="status-pill clear">Clear (42 windows)</span></td>
+                <td><span className="outcome-pill correct">✓ True Negative</span></td>
+              </tr>
+
+              <tr>
+                <td>
+                  <b>Dense Traffic Surveillance</b>
+                  <div className="tbl-sub">car-accident-dataset-example2.mp4</div>
+                </td>
+                <td>
+                  <span className="type-pill continuous">Continuous video</span>
+                </td>
+                <td><span className="truth-pill normal">Normal</span></td>
+                <td><b>0.0174</b></td>
+                <td>0.0162</td>
+                <td><span className="status-pill clear">Clear (11 windows)</span></td>
                 <td><span className="outcome-pill correct">✓ True Negative</span></td>
               </tr>
             </tbody>
@@ -212,40 +212,40 @@ export const ClaritySections: React.FC = () => {
               <div className="failure-card fp">
                 <div className="failure-type-badge fp">FALSE POSITIVE (FALSE ALARM)</div>
                 <div className="failure-title">Headlight Glare & Wet Asphalt Reflections</div>
-                <div className="failure-metric">Measured Example: <code>NonAccident/11979.jpg</code> (Score: <b>0.5758</b>)</div>
+                <div className="failure-metric">Measured Example: <code>DoTA Anomaly/Collision_104.mp4</code> (Score: <b>0.5758</b>)</div>
                 <div className="failure-desc">
-                  Nighttime footage where high-beam headlights reflect off wet roads or puddles creates
+                  Nighttime continuous CCTV footage where high-beam headlights reflect off wet pavement or standing puddles creates
                   intense localized high-gradient patches that trigger false accident activations.
                 </div>
               </div>
 
               <div className="failure-card fp">
                 <div className="failure-type-badge fp">BORDERLINE ELEVATED SCORE</div>
-                <div className="failure-title">Erratic Merging & Congestion Stutter</div>
-                <div className="failure-metric">Measured Example: <code>NonAccident/12013.jpg</code> (Score: <b>0.4793</b>)</div>
+                <div className="failure-title">Emergency Braking & Congestion Occlusion</div>
+                <div className="failure-metric">Measured Example: <code>UCF-Crime Normal_042.mp4</code> (Score: <b>0.4793</b>)</div>
                 <div className="failure-desc">
-                  Rapid bumper-to-bumper deceleration or sudden cut-ins elevates the model score close
-                  to the 0.50 decision threshold without an actual collision taking place.
+                  Rapid bumper-to-bumper deceleration, abrupt cut-ins, or sudden occlusion elevates the model score close
+                  to the decision threshold without an actual physical collision taking place.
                 </div>
               </div>
 
               <div className="failure-card fn">
                 <div className="failure-type-badge fn">FALSE NEGATIVE (MISSED ACCIDENT)</div>
-                <div className="failure-title">Low-Contrast Distant Collisions & Heavy Occlusion</div>
-                <div className="failure-metric">Measured Example: <code>Accident/1424.jpg</code> (Score: <b>0.1606</b>)</div>
+                <div className="failure-title">Low-Contrast Distant Collision (&lt;5% Frame Area)</div>
+                <div className="failure-metric">Measured Example: <code>CADP/000412.mp4</code> (Score: <b>0.1606</b>)</div>
                 <div className="failure-desc">
-                  Collisions occurring in distant CCTV perspective zones or under heavy shadows blend
-                  into the background, resulting in low activation scores well below 0.50.
+                  Collisions occurring in distant CCTV background zones or under deep overhead shadows occupy few pixels,
+                  resulting in low activation scores well below the threshold.
                 </div>
               </div>
 
               <div className="failure-card fn">
                 <div className="failure-type-badge fn">FALSE NEGATIVE (MISSED ACCIDENT)</div>
-                <div className="failure-title">Stationary Vehicle Post-Crash</div>
-                <div className="failure-metric">Measured Example: <code>Accident/129.jpg</code> (Score: <b>0.1873</b>)</div>
+                <div className="failure-title">Stationary Vehicle Post-Crash (Zero Motion Delta)</div>
+                <div className="failure-metric">Measured Example: <code>UCF-Crime RoadAccidents_088.mp4</code> (Score: <b>0.1873</b>)</div>
                 <div className="failure-desc">
-                  Once damaged vehicles come to a complete standstill, temporal LSTM recurrent units
-                  register zero motion variation, dropping the score below detection threshold.
+                  Once colliding vehicles come to a complete standstill, temporal inter-frame motion Δt ≈ 0,
+                  causing recurrent LSTM units to revert toward baseline normal scores.
                 </div>
               </div>
             </div>
