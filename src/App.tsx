@@ -15,7 +15,7 @@ import { evaluatePredictionsAtThreshold } from './utils/threshold';
 import { MapPanel, type CameraInfo } from './components/MapPanel';
 import { IncidentFeed } from './components/IncidentFeed';
 import { ClaritySections } from './components/ClaritySections';
-import { type Incident, clusterWindowsClient } from './utils/incidents';
+import { type Incident, clusterWindowsClient, DEFAULT_DEMO_INCIDENTS } from './utils/incidents';
 import { runBrowserInferenceOnVideo } from './utils/browserInference';
 
 // =====================================================================
@@ -502,11 +502,11 @@ export default function App() {
 
   // --- Cameras and Registry ---
   const [cameras, setCameras] = useState<CameraInfo[]>([]);
-  const [selectedCameraId, setSelectedCameraId] = useState<string>('cam-01');
+  const [selectedCameraId, setSelectedCameraId] = useState<string>('cam-mum-01');
   const [uploadLocationLabel, setUploadLocationLabel] = useState<string>('');
 
   // --- Incidents & Operations ---
-  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [incidents, setIncidents] = useState<Incident[]>(DEFAULT_DEMO_INCIDENTS);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
 
   // --- Inference Engine ---
@@ -562,9 +562,15 @@ export default function App() {
 
     fetchCameras()
       .then((cams) => {
-        if (Array.isArray(cams) && cams.length > 0) setCameras(cams);
+        if (Array.isArray(cams) && cams.length > 0) {
+          setCameras(cams);
+        } else {
+          fetch('/cameras.json').then((r) => r.json()).then((data) => setCameras(data)).catch(() => {});
+        }
       })
-      .catch(() => {});
+      .catch(() => {
+        fetch('/cameras.json').then((r) => r.json()).then((data) => setCameras(data)).catch(() => {});
+      });
 
     fetchIncidents()
       .then((res) => {

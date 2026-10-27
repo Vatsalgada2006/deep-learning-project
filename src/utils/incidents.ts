@@ -30,6 +30,41 @@ export interface WindowPrediction {
   is_accident: boolean;
 }
 
+export const DEFAULT_DEMO_INCIDENTS: Incident[] = [
+  {
+    id: 'inc-demo-001',
+    camera_id: 'cam-mum-01',
+    camera_name: 'Camera 01 - Dadar TT Circle',
+    detected_at: '2026-10-27T01:30:00Z',
+    video_start_time: 0.0,
+    video_end_time: 1.67,
+    peak_confidence: 0.8724,
+    mean_confidence: 0.2671,
+    window_indices: [0, 1],
+    peak_frame_snapshot: '/samples/accident_crash_demo.jpg',
+    model_version: '2.0.0',
+    status: 'confirmed',
+    operator_note: 'Verified vehicle collision on lane 2. Dispatched roadside unit.',
+    location_label: 'Location: Dadar, Mumbai (Simulated demo cameras, not real CCTV locations)',
+  },
+  {
+    id: 'inc-demo-002',
+    camera_id: 'cam-mum-02',
+    camera_name: 'Camera 02 - Bandra WEH Flyover',
+    detected_at: '2026-10-27T02:05:00Z',
+    video_start_time: 0.0,
+    video_end_time: 1.67,
+    peak_confidence: 0.8977,
+    mean_confidence: 0.7336,
+    window_indices: [0, 1],
+    peak_frame_snapshot: '/samples/video_project.jpg',
+    model_version: '2.0.0',
+    status: 'new',
+    operator_note: '',
+    location_label: 'Location: Bandra, Mumbai (Simulated demo cameras, not real CCTV locations)',
+  },
+];
+
 export function clusterWindowsClient(
   predictions: WindowPrediction[],
   options: {
