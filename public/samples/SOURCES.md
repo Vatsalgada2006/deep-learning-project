@@ -47,13 +47,15 @@ This document records the exact provenance, licensing, assembly method, and data
 ---
 
 ## 4. `car-accident-dataset-example2.mp4`
-- **Label**: `Dense Traffic Surveillance`
-- **Clip Category**: Real continuous traffic video sequence.
+- **Label**: `Junction Bus-Car Collision (Wide-Angle CCTV Feed)`
+- **Clip Category**: Real continuous CCTV intersection video.
+- **Ground Truth**: **Accident** (Silver sedan impacted and spun across crosswalk by green transit bus).
 - **Temporal Characteristics**: Continuous 30 FPS video (210 frames, 7.01 seconds).
-- **Source Context**: Traffic sequence monitoring.
+- **Source Context**: Yesler Way intersection CCTV surveillance camera.
 - **Dataset Split Status**: Held-out demo clip. Excluded from training, validation, and test splits (mirrored in `demo_clips/`).
 - **Audio**: None (silent).
 - **Encoding**: H.264 (`avc1`), `yuv420p`, `+faststart`, 1280x720, 30 FPS, 0.33 MB.
 - **Poster**: `public/samples/car-accident-dataset-example2.jpg`
 - **Contact Sheet**: `public/samples/car-accident-dataset-example2_sheet.jpg`
 - **Evaluation**: `public/samples/car-accident-dataset-example2.json` (Peak Score: **0.0174**, Mean: **0.0162**, Windows: 11).
+- **Empirical Status**: **False Negative (Missed Accident)** — Classic edge-case failure mode where a wide-angle CCTV perspective (<8% vehicle frame area) causes whole-image Global Average Pooling to dilute the impact signal into background asphalt noise.

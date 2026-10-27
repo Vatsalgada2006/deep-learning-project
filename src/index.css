@@ -2612,6 +2612,16 @@ body {
   font-weight: 700;
 }
 
+.outcome-pill.fn {
+  color: #fc8181;
+  font-weight: 700;
+}
+
+.status-pill.missed {
+  color: #fc8181;
+  font-weight: 600;
+}
+
 /* Failure Modes */
 .failure-intro {
   font-size: 12px;

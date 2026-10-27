@@ -170,17 +170,17 @@ export const ClaritySections: React.FC = () => {
 
               <tr>
                 <td>
-                  <b>Dense Traffic Surveillance</b>
+                  <b>Junction Bus-Car Collision</b>
                   <div className="tbl-sub">car-accident-dataset-example2.mp4</div>
                 </td>
                 <td>
                   <span className="type-pill continuous">Continuous video</span>
                 </td>
-                <td><span className="truth-pill normal">Normal</span></td>
+                <td><span className="truth-pill accident">Accident</span></td>
                 <td><b>0.0174</b></td>
                 <td>0.0162</td>
-                <td><span className="status-pill clear">Clear (11 windows)</span></td>
-                <td><span className="outcome-pill correct">✓ True Negative</span></td>
+                <td><span className="status-pill missed">Missed (&lt;0.50)</span></td>
+                <td><span className="outcome-pill fn">✗ False Negative (Missed Accident)</span></td>
               </tr>
             </tbody>
           </table>
@@ -231,11 +231,12 @@ export const ClaritySections: React.FC = () => {
 
               <div className="failure-card fn">
                 <div className="failure-type-badge fn">FALSE NEGATIVE (MISSED ACCIDENT)</div>
-                <div className="failure-title">Low-Contrast Distant Collision (&lt;5% Frame Area)</div>
-                <div className="failure-metric">Measured Example: <code>CADP/000412.mp4</code> (Score: <b>0.1606</b>)</div>
+                <div className="failure-title">Wide-Angle Junction & Distant Collisions (&lt;8% Frame Area)</div>
+                <div className="failure-metric">Measured Example: <code>car-accident-dataset-example2.mp4</code> (Yesler Way CCTV, Score: <b>0.0174</b>)</div>
                 <div className="failure-desc">
-                  Collisions occurring in distant CCTV background zones or under deep overhead shadows occupy few pixels,
-                  resulting in low activation scores well below the threshold.
+                  In wide-angle junction CCTV footage (e.g. Yesler Way), the bus-car collision occupies &lt;8% of the frame.
+                  Global Average Pooling averages the entire 128×128 feature map across static asphalt and zebra markings,
+                  swamping the vehicle impact signal into background noise and resulting in a missed alert (Score 0.0174).
                 </div>
               </div>
 

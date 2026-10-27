@@ -119,7 +119,7 @@ const SAMPLE_CLIPS: SampleClip[] = [
     label: 'Car Accident Example 2 (Junction CCTV Feed)',
     resultPath: '/samples/car-accident-dataset-example2.json',
     poster: '/samples/car-accident-dataset-example2.jpg',
-    tag: 'NORMAL',
+    tag: 'ACCIDENT',
     isSequence: false,
     naturalFps: 30,
     source: 'To be confirmed by user',
