@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   apiFetch,
-  WS_URL,
+  getApiBase,
+  getWsUrl,
+  setCustomApiBase,
   ApiError,
   fetchCameras,
   fetchIncidents,
@@ -571,7 +573,7 @@ export default function App() {
   const checkHealth = useCallback(async (): Promise<boolean> => {
     try {
       const data = await apiFetch<ServerHealth>('/health', {
-        timeoutMs: 8000,
+        timeoutMs: 12000,
         retries: 0,
       });
       setHealthInfo(data);
@@ -659,7 +661,7 @@ export default function App() {
 
     const connectWs = () => {
       try {
-        ws = new WebSocket(WS_URL);
+        ws = new WebSocket(getWsUrl());
         ws.onopen = () => { setWsConnected(true); backoff = 2000; };
         ws.onclose = () => {
           setWsConnected(false);
@@ -1117,12 +1119,12 @@ export default function App() {
           {serverState === 'waking' && (
             <div className="wakeup-banner" style={{ marginBottom: 'var(--sp-4)' }}>
               <div className="spinner" style={{ borderColor: '#ffc107', borderTopColor: '#fff' }} />
-              <div>
+              <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>
-                  Waking up Render instance (attempt {wakingAttempt}, {wakingElapsed}s elapsed)
+                  Waking up Render backend (attempt {wakingAttempt}, {wakingElapsed}s elapsed)
                 </div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,193,7,0.7)', marginTop: 2 }}>
-                  Cold start takes ~30–50s (stops at 90s). All sample clips work offline below!
+                  Connecting to <code style={{ color: '#fff', background: 'rgba(0,0,0,0.3)', padding: '1px 5px', borderRadius: 3 }}>{getApiBase()}</code>. Free-tier cold start takes ~30–50s (stops at 90s). All sample clips work offline below!
                 </div>
               </div>
             </div>
@@ -1136,12 +1138,41 @@ export default function App() {
                   Server Offline — Reason: {serverErrorReason || 'timeout (stopped after 90s)'}
                 </div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-dim)', marginTop: 2 }}>
-                  Precomputed demo samples remain 100% interactive offline. Click Retry to re-ping the server.
+                  Target: <code style={{ color: '#ffb74d', background: 'rgba(0,0,0,0.3)', padding: '1px 5px', borderRadius: 3 }}>{getApiBase()}</code>
+                  {' • '}Precomputed demo samples remain 100% interactive offline. Click Retry to re-ping the server.
                 </div>
               </div>
-              <button className="btn btn-outline" onClick={handleRetryConnection} style={{ fontSize: '11px', padding: '6px 12px' }}>
-                ↻ Retry Connection
-              </button>
+              <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap', alignItems: 'center' }}>
+                {getApiBase() !== 'https://road-accident-detection-api.onrender.com' && (
+                  <button
+                    className="btn btn-outline"
+                    onClick={() => {
+                      setCustomApiBase('https://road-accident-detection-api.onrender.com');
+                      handleRetryConnection();
+                    }}
+                    style={{ fontSize: '11px', padding: '6px 12px', borderColor: '#00e5ff', color: '#00e5ff' }}
+                    title="Connect to live deployed Render Cloud backend"
+                  >
+                    ☁ Switch to Cloud Render
+                  </button>
+                )}
+                {getApiBase() !== 'http://localhost:8001' && (
+                  <button
+                    className="btn btn-outline"
+                    onClick={() => {
+                      setCustomApiBase('http://localhost:8001');
+                      handleRetryConnection();
+                    }}
+                    style={{ fontSize: '11px', padding: '6px 12px' }}
+                    title="Point to local backend running on port 8001"
+                  >
+                    💻 Switch to Local (8001)
+                  </button>
+                )}
+                <button className="btn btn-outline" onClick={handleRetryConnection} style={{ fontSize: '11px', padding: '6px 12px' }}>
+                  ↻ Retry Ping
+                </button>
+              </div>
             </div>
           )}
 

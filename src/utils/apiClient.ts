@@ -3,11 +3,57 @@
  * Eliminates "Unexpected token '<' / <!doctype" errors when receiving HTML.
  */
 
-export const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:8001').replace(/\/+$/, '');
-const RAW_WS = import.meta.env.VITE_WS_URL || '';
-export const WS_URL = RAW_WS
-  ? RAW_WS
-  : `${API_BASE.replace(/^http/, 'ws')}/ws/alerts`;
+export const DEFAULT_PROD_API_BASE = 'https://road-accident-detection-api.onrender.com';
+export const DEFAULT_LOCAL_API_BASE = 'http://localhost:8001';
+
+/**
+ * Dynamically resolves the API base URL:
+ * 1. Checks localStorage for a user-specified custom API base (allows switching in UI)
+ * 2. Checks import.meta.env.VITE_API_URL
+ * 3. In non-localhost environments (e.g. Vercel deployment), defaults to the live Render backend
+ * 4. Otherwise defaults to http://localhost:8001
+ */
+export function getApiBase(): string {
+  if (typeof window !== 'undefined') {
+    const custom = localStorage.getItem('custom_api_base');
+    if (custom && custom.trim()) {
+      return custom.trim().replace(/\/+$/, '');
+    }
+  }
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.trim()) {
+    return envUrl.trim().replace(/\/+$/, '');
+  }
+  if (typeof window !== 'undefined' && window.location) {
+    const host = window.location.hostname;
+    if (host !== 'localhost' && host !== '127.0.0.1' && host !== '0.0.0.0') {
+      return DEFAULT_PROD_API_BASE;
+    }
+  }
+  return DEFAULT_LOCAL_API_BASE;
+}
+
+export function setCustomApiBase(url: string | null): void {
+  if (typeof window !== 'undefined') {
+    if (url && url.trim()) {
+      localStorage.setItem('custom_api_base', url.trim().replace(/\/+$/, ''));
+    } else {
+      localStorage.removeItem('custom_api_base');
+    }
+  }
+}
+
+export function getWsUrl(): string {
+  const envWs = import.meta.env.VITE_WS_URL;
+  if (envWs && envWs.trim()) {
+    return envWs.trim();
+  }
+  const apiBase = getApiBase();
+  return `${apiBase.replace(/^http/, 'ws')}/ws/alerts`;
+}
+
+export const API_BASE = getApiBase();
+export const WS_URL = getWsUrl();
 
 export interface ApiFetchOptions extends RequestInit {
   timeoutMs?: number;
@@ -91,7 +137,7 @@ export async function apiFetch<T = any>(
     ...fetchOptions
   } = options;
 
-  const url = path.startsWith('http') ? path : `${API_BASE}${path.startsWith('/') ? '' : '/'}${path}`;
+  const url = path.startsWith('http') ? path : `${getApiBase()}${path.startsWith('/') ? '' : '/'}${path}`;
 
   let attempts = 0;
   let lastError: any = null;
