@@ -1139,10 +1139,27 @@ export default function App() {
                 </div>
                 <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-dim)', marginTop: 2 }}>
                   Target: <code style={{ color: '#ffb74d', background: 'rgba(0,0,0,0.3)', padding: '1px 5px', borderRadius: 3 }}>{getApiBase()}</code>
-                  {' • '}Precomputed demo samples remain 100% interactive offline. Click Retry to re-ping the server.
+                  {' • '}
+                  <a
+                    href={`${getApiBase()}/health`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: '#00e5ff', textDecoration: 'underline' }}
+                  >
+                    Test /health directly ↗
+                  </a>
+                  {' • '}Precomputed demo samples remain 100% interactive offline.
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap', alignItems: 'center' }}>
+                <button
+                  className="btn btn-outline"
+                  onClick={() => setInferenceEngine('browser')}
+                  style={{ fontSize: '11px', padding: '6px 12px', borderColor: '#00ff41', color: '#00ff41' }}
+                  title="Run models client-side in WebAssembly without needing a server"
+                >
+                  ⚡ Use In-Browser ONNX
+                </button>
                 {getApiBase() !== 'https://road-accident-detection-api.onrender.com' && (
                   <button
                     className="btn btn-outline"
@@ -1153,7 +1170,7 @@ export default function App() {
                     style={{ fontSize: '11px', padding: '6px 12px', borderColor: '#00e5ff', color: '#00e5ff' }}
                     title="Connect to live deployed Render Cloud backend"
                   >
-                    ☁ Switch to Cloud Render
+                    ☁ Cloud Render
                   </button>
                 )}
                 {getApiBase() !== 'http://localhost:8001' && (
@@ -1166,7 +1183,7 @@ export default function App() {
                     style={{ fontSize: '11px', padding: '6px 12px' }}
                     title="Point to local backend running on port 8001"
                   >
-                    💻 Switch to Local (8001)
+                    💻 Local Backend (:8001)
                   </button>
                 )}
                 <button className="btn btn-outline" onClick={handleRetryConnection} style={{ fontSize: '11px', padding: '6px 12px' }}>

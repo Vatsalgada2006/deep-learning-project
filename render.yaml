@@ -20,7 +20,7 @@ services:
       - key: ALLOWED_ORIGINS
         value: "https://deep-learning-project-liard.vercel.app,http://localhost:5173,http://localhost:3000"
       - key: CORS_ORIGIN_REGEX
-        value: "https?://(localhost|127\\.0\\.0\\.1|([a-zA-Z0-9_-]+\\.)*vercel\\.app|.*\\.onrender\\.com)(:\\d+)?"
+        value: ".*"
       - key: MONGO_URI
         sync: false
       - key: MONGO_DB_NAME

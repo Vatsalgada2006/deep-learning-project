@@ -208,6 +208,7 @@ export async function apiFetch<T = any>(
         reason = err.message || 'network';
       }
 
+      console.warn(`[apiFetch error] Failed to reach ${url}:`, err);
       throw new ApiError(
         0,
         err.message || 'Network error',

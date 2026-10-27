@@ -383,7 +383,7 @@ app = FastAPI(
 
 CORS_ORIGIN_REGEX = os.getenv(
     "CORS_ORIGIN_REGEX",
-    r"https?://(localhost|127\.0\.0\.1|.*\.vercel\.app|.*\.onrender\.com)(:\d+)?",
+    r".*",
 )
 
 app.add_middleware(
