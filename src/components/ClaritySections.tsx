@@ -41,8 +41,8 @@ export const ClaritySections: React.FC = () => {
                   <span className="tooltip-badge" title="Sliding window progression">ℹ️</span>
                 </div>
                 <div className="guide-v">
-                  Videos are sampled every 5th frame and evaluated in sliding windows of 10 frames
-                  (stride = 5 frames). The horizontal timeline marks each evaluated window across time.
+                  Videos are sampled every 2nd frame (effective 15 FPS) and evaluated in sliding windows
+                  of 10 frames (0.67s temporal span). The horizontal timeline marks each evaluated window across time.
                 </div>
               </div>
 

@@ -131,7 +131,11 @@ export const MapPanel: React.FC<MapPanelProps> = ({
 
     // 2. Add incident markers (matched to cameras)
     incidents.forEach((inc) => {
-      const matchedCam = cameras.find((c) => c.id === inc.camera_id);
+      const matchedCam = cameras.find((c) =>
+        c.id === inc.camera_id ||
+        c.id === inc.camera_id.replace('cam-', 'cam-mum-') ||
+        inc.camera_id === c.id.replace('cam-mum-', 'cam-')
+      );
       if (!matchedCam) return;
 
       const isNew = inc.status === 'new';

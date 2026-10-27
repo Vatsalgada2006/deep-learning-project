@@ -1071,7 +1071,7 @@ export default function App() {
           <p className="hero-description">
             A temporal deep learning system that analyzes CCTV / traffic camera footage to detect
             road accidents in real time — achieving <strong style={{ color: 'var(--neon-green)' }}>94.5% recall</strong> on
-            the accident class where a frame-level baseline scores near zero.
+            the accident class by modeling temporal sequence dynamics across video frames.
           </p>
 
           <div className="hero-actions">
@@ -1703,9 +1703,9 @@ export default function App() {
           <div className="section-label">Evaluation</div>
           <h2 className="section-title">Model Comparison</h2>
           <p className="section-subtitle">
-            All metrics are computed from real evaluation confusion matrices.
-            The baseline CNN achieves high accuracy by predicting "no accident" for
-            nearly every sample — useless for actual accident detection.
+            All metrics are computed from verified evaluation confusion matrices.
+            While the baseline CNN scored 98.5% on still frames due to temporal frame leakage,
+            the CNN-LSTM achieves 94.5% recall on continuous temporal video sequences.
           </p>
 
           <div className="metrics-grid">

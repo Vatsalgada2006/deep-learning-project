@@ -64,7 +64,7 @@ export async function runBrowserInferenceOnVideo(
   const duration = videoEl.duration || 10;
   const nominalFps = 20;
   const totalFramesApprox = Math.floor(duration * nominalFps);
-  const sampleInterval = 5;
+  const sampleInterval = 2;
   const seqLength = 10;
 
   const canvas = document.createElement('canvas');
@@ -111,7 +111,7 @@ export async function runBrowserInferenceOnVideo(
   const t0 = performance.now();
   let winIdx = 0;
 
-  for (let start = 0; start <= sampledFramesData.length - seqLength; start += 5) {
+  for (let start = 0; start <= sampledFramesData.length - seqLength; start += 2) {
     const windowSlice = sampledFramesData.slice(start, start + seqLength);
     const tensorData = new Float32Array(1 * seqLength * 128 * 128 * 3);
     for (let f = 0; f < seqLength; f++) {

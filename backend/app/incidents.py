@@ -18,8 +18,8 @@ DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 IN_MEMORY_INCIDENTS: List[Dict[str, Any]] = [
     {
         "id": "inc-demo-001",
-        "camera_id": "cam-01",
-        "camera_name": "Camera 01 - Highway Sector 4",
+        "camera_id": "cam-mum-01",
+        "camera_name": "Camera 01 - Dadar TT Circle",
         "detected_at": "2026-10-27T01:30:00Z",
         "video_start_time": 0.0,
         "video_end_time": 1.67,
@@ -30,12 +30,12 @@ IN_MEMORY_INCIDENTS: List[Dict[str, Any]] = [
         "model_version": "2.0.0",
         "status": "confirmed",
         "operator_note": "Verified vehicle collision on lane 2. Dispatched roadside unit.",
-        "location_label": "Location: not available in dataset (simulated demo camera)",
+        "location_label": "Location: Dadar, Mumbai (Simulated demo cameras, not real CCTV locations)",
     },
     {
         "id": "inc-demo-002",
-        "camera_id": "cam-02",
-        "camera_name": "Camera 02 - Downtown Junction",
+        "camera_id": "cam-mum-02",
+        "camera_name": "Camera 02 - Bandra WEH Flyover",
         "detected_at": "2026-10-27T02:05:00Z",
         "video_start_time": 0.0,
         "video_end_time": 1.67,
@@ -46,7 +46,7 @@ IN_MEMORY_INCIDENTS: List[Dict[str, Any]] = [
         "model_version": "2.0.0",
         "status": "new",
         "operator_note": "",
-        "location_label": "Location: not available in dataset (simulated demo camera)",
+        "location_label": "Location: Bandra, Mumbai (Simulated demo cameras, not real CCTV locations)",
     }
 ]
 
